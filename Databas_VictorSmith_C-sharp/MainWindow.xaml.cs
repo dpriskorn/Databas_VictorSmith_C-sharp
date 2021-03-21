@@ -22,34 +22,42 @@ namespace Databas_VictorSmith_C_sharp
     /// </summary>
     public partial class MainWindow : Window
     {
+        // <initialization>
+        public Observer selectedObserver;
+        IEnumerable<Observer> listOfObservers;
+        // </initialization>
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-
-
         private void GetObserver_Click(object sender, RoutedEventArgs e)
         {
-            List<Observer> listedObserver = new List<Observer>();
-            listedObserver = CRUD.GetObserver().ToList();
+            listOfObservers = CRUD.GetObserver();
+            // Uppdatera listan på användares begäran för att se aktuella observatörer.
             PresentObservers.ItemsSource = null;
-            PresentObservers.ItemsSource = listedObserver;
+            PresentObservers.ItemsSource = listOfObservers;
         }
 
         private void AddObserver_Click(object sender, RoutedEventArgs e)
         {
+            // Lägger till fake-observatörer för att kunna testa funktioner.
             CRUD.AddObserver();
         }
         private void DeleteObserver_Click(object sender, RoutedEventArgs e)
-        {
-            Observer selectedObserver = (Observer)PresentObservers.SelectedItem;
+        {          
             CRUD.DeleteObserver(selectedObserver);
+            // Uppdaterar listan för att reflektera vilka observatörer som existerar.
+            PresentObservers.ItemsSource = null;
+            PresentObservers.ItemsSource = listOfObservers;
         }
 
         private void PresentObservers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            // Uppdatera listan så att vald observatör faktiskt finns i databasen.
+            CRUD.GetObserver();
+            selectedObserver = (Observer)PresentObservers.SelectedItem;
         }
 
         private void SelectObserver_Click(object sender, RoutedEventArgs e)

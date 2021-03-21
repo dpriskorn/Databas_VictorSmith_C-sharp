@@ -51,7 +51,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
             string stmt = "SELECT id, firstname, lastname FROM observer ORDER BY lastname";
             using (var conn = new NpgsqlConnection(connectionString))
             {
-                Observer obs = null;
+                Observer obs;
                 List<Observer> observers = new List<Observer>();
                 conn.Open();
                 using (var command = new NpgsqlCommand(stmt, conn))
@@ -87,7 +87,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region DELETE
         public static string DeleteObserver(Observer obs)
         {
-            string stmt = "DELETE FROM observer WHERE id="+obs;
+            string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
@@ -108,6 +108,17 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 }
             }
             return MessageBox.Show("Observatören är nu borttagen.").ToString();
+        }
+
+        public static void UpdateObserverList()
+        {
+            // Kod för att uppdatera listan med aktuella observatörer
+            // för att inte behöva köra denna kod efter varje uppdatering.
+            //
+            // PresentObservers.ItemsSource = null;
+            // PresentObservers.ItemsSource = listOfObservers;
+            //
+            // Problem 1: PresentObservers objektet finns ej tillgängligt i CRUD.cs
         }
     }
         #endregion
