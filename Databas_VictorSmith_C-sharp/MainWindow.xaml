@@ -1,4 +1,5 @@
-﻿<Window x:Class="Databas_VictorSmith_C_sharp.MainWindow"
+﻿<!--Alla avbryt döljer i UI och kaster data som matats in-->
+<Window x:Class="Databas_VictorSmith_C_sharp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -82,13 +83,13 @@
         <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="2">
             <Label Content="Redigera klimatobservation" FontSize="18" />
             <Label Content="Område:" FontSize="12" />
-            <ListBox x:Name="Areas"></ListBox>
+            <ListBox x:Name="editAreas"></ListBox>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="submitObservationButton" Content="Spara" FontSize="12" Margin="10" Width="50"/>
                 <Button x:Name="cancelObservationButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
             </StackPanel>
             <Label Content="Mätpunkter i denna observation:" FontSize="12" />
-            <ListBox x:Name="ObservationMeasurements"></ListBox>
+            <ListBox x:Name="observationMeasurements"></ListBox>
             <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="addMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110"/>
@@ -101,7 +102,7 @@
             <Label Content="Lägg till klimatobservation" FontSize="18" />
             <Label Content="Område:" FontSize="12" />
             <!--börjar tom-->
-            <ListBox x:Name="areas"></ListBox>
+            <ListBox x:Name="newAreas"></ListBox>
             <TextBlock Text = "Välj område genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
             <Label Content="Mätpunkter:" FontSize="12" />
             <!--börjar tom-->
@@ -121,16 +122,16 @@
         <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="2">
             <Label Content="Redigera mätpunkt" FontSize="18" />
             <Label Content="Kategori:" FontSize="12" />
-            <ListBox x:Name="Categories"></ListBox>
+            <ListBox x:Name="editCategory"></ListBox>
             <TextBlock Text = "Ändra kategori genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
             <Label Content="Värde:" FontSize="12" />
             <TextBox x:Name="valueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
             <Label Content="Enhet:" FontSize="12" />
-            <ListBox x:Name="Units"></ListBox>
+            <ListBox x:Name="editUnits"></ListBox>
             <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50"/>
-                <Button x:Name="cancelMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="submitEditMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="cancelEditMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="3">
@@ -149,7 +150,7 @@
                 <Button x:Name="cancelNewMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
             </StackPanel>
         </StackPanel>
-        <!-- gammalt
+        <!-- gammalt -->
         <StackPanel Orientation = "Horizontal"> 
 			<Button Content="Button" HorizontalAlignment="Left" Margin="730,23,0,0" VerticalAlignment="Top" Click="GetObserver_Click"/>
 			<Button Content="Button" HorizontalAlignment="Left" Margin="730,166,0,0" VerticalAlignment="Top" Click="AddObserver_Click"/>
@@ -161,6 +162,6 @@
 			<Label Content="Add New Observer" HorizontalAlignment="Left" Margin="619,163,0,0" VerticalAlignment="Top"/>
 			<Label Content="Select Observer" HorizontalAlignment="Left" Margin="633,235,0,0" VerticalAlignment="Top"/>
 		</StackPanel> 	
-        -->
+        
     </Grid>
 </Window>
