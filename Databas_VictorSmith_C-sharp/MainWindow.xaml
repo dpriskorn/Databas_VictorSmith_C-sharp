@@ -29,8 +29,9 @@
         <StackPanel Orientation = "Vertical" Grid.Column="1" Grid.Row="1"> 
 			<Label Content="Klimatobservatörer" FontSize="18" />
             <ListBox x:Name="Observers"></ListBox>
-            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera."/> 
-		</StackPanel>
+            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera."/>
+            <Button x:Name="newObserverButton" Content="Lägg till observatör" FontSize="12" Margin="10" Width="130"/>
+        </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="1"> 
 			<Label Content="Klimatobservationer" FontSize="18" />
             <ListBox x:Name="Observations"></ListBox>
@@ -56,6 +57,23 @@
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="submitObserverButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
                 <Button x:Name="deleteObserverButton" Content="Radera" FontSize="12" Margin="10" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+		<StackPanel Orientation = "Vertical" Grid.Column="1" Grid.Row="3">
+            <Label Content="Lägg till klimatobservatör" FontSize="18" />
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Förnamn" FontSize="12" />
+                    <TextBox x:Name="nameNewObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Efternamn" FontSize="12" />
+                    <TextBox x:Name="familynameNewObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="submitNewObserverButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="cancelObserverButton" Content="Avbryt" FontSize="12" Margin="10" Width="100"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="2">
