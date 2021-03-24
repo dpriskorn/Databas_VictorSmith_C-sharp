@@ -7,16 +7,85 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="730,23,0,0" VerticalAlignment="Top" Click="GetObserver_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="730,166,0,0" VerticalAlignment="Top" Click="AddObserver_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="730,94,0,0" VerticalAlignment="Top" Click="DeleteObserver_Click"/>
-        <ListBox x:Name="PresentObservers" Margin="10,10,618,86" SelectionChanged="PresentObservers_SelectionChanged"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="730,238,0,0" VerticalAlignment="Top" Click="SelectObserver_Click"/>
-        <Label Content="Populate List" HorizontalAlignment="Left" Margin="636,20,0,0" VerticalAlignment="Top"/>
-        <Label Content="Delete Observer" HorizontalAlignment="Left" Margin="630,91,0,0" VerticalAlignment="Top"/>
-        <Label Content="Add New Observer" HorizontalAlignment="Left" Margin="619,163,0,0" VerticalAlignment="Top"/>
-        <Label Content="Select Observer" HorizontalAlignment="Left" Margin="633,235,0,0" VerticalAlignment="Top"/>
-
+	    <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="20" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation = "Vertical" Grid.Column="1" Grid.Row="1"> 
+			<Label Content="Klimatobservatörer" FontSize="18" />
+            <ListBox x:Name="Observers"></ListBox>
+            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera."/> 
+		</StackPanel>
+        <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="1"> 
+			<Label Content="Klimatobservationer" FontSize="18" />
+            <ListBox x:Name="Observations"></ListBox>
+            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera."/>
+        </StackPanel>
+        <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="1"> 
+			<Label Content="Mätpunkter" FontSize="18" />
+            <ListBox x:Name="Measurements"></ListBox>
+            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera."/>
+        </StackPanel>
+        <StackPanel Orientation = "Vertical" Grid.Column="1" Grid.Row="2">
+            <Label Content="Redigera klimatobservatör" FontSize="18" />
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Förnamn" FontSize="12" />
+                    <TextBox x:Name="nameObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Efternamn" FontSize="12" />
+                    <TextBox x:Name="familynameObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="submitObserverButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="deleteObserverButton" Content="Radera" FontSize="12" Margin="10" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="2">
+            <Label Content="Redigera klimatobservation" FontSize="18" />
+            <Label Content="Namn" FontSize="12" />
+            <TextBox x:Name="nameInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="submitObservationButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="deleteObservationButton" Content="Radera" FontSize="12" Margin="10" Width="100"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="2"> 
+			<TextBlock Text = "Mätpunkter redigera"/> 
+		</StackPanel> 
+		<StackPanel Orientation = "Vertical" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"> 
+			<Label Content="Detaljer" FontSize="18" />
+			<TextBlock Text = "Här visas datan upp lite snyggt efter klimatobservation"/>
+			<TextBlock Text = "Eftersom det kan finnas flera mätpunkter skulle vi kunna generera den informationen via C# :)"/>			
+		</StackPanel> 
+		<StackPanel Orientation = "Horizontal"> 
+			<Button Content="Button" HorizontalAlignment="Left" Margin="730,23,0,0" VerticalAlignment="Top" Click="GetObserver_Click"/>
+			<Button Content="Button" HorizontalAlignment="Left" Margin="730,166,0,0" VerticalAlignment="Top" Click="AddObserver_Click"/>
+			<Button Content="Button" HorizontalAlignment="Left" Margin="730,94,0,0" VerticalAlignment="Top" Click="DeleteObserver_Click"/>
+			<ListBox x:Name="PresentObservers" Margin="10,10,618,86" SelectionChanged="PresentObservers_SelectionChanged"/>
+			<Button Content="Button" HorizontalAlignment="Left" Margin="730,238,0,0" VerticalAlignment="Top" Click="SelectObserver_Click"/>
+			<Label Content="Populate List" HorizontalAlignment="Left" Margin="636,20,0,0" VerticalAlignment="Top"/>
+			<Label Content="Delete Observer" HorizontalAlignment="Left" Margin="630,91,0,0" VerticalAlignment="Top"/>
+			<Label Content="Add New Observer" HorizontalAlignment="Left" Margin="619,163,0,0" VerticalAlignment="Top"/>
+			<Label Content="Select Observer" HorizontalAlignment="Left" Margin="633,235,0,0" VerticalAlignment="Top"/>
+		</StackPanel> 	
 
     </Grid>
 </Window>
