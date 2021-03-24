@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Databas_VictorSmith_C_sharp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900">
+        Title="MainWindow" Height="600" Width="900">
     <Grid>
 	    <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -36,6 +36,7 @@
 			<Label Content="Klimatobservationer" FontSize="18" />
             <ListBox x:Name="Observations"></ListBox>
             <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera." MaxWidth="200" TextWrapping="Wrap"/>
+            <Button x:Name="newObservationButton" Content="Lägg till observation" FontSize="12" Margin="10" Width="130"/>
         </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="1"> 
 			<Label Content="Mätpunkter" FontSize="18" />
@@ -63,11 +64,11 @@
             <Label Content="Lägg till klimatobservatör" FontSize="18" />
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Förnamn" FontSize="12" />
+                    <Label Content="Förnamn:" FontSize="12" />
                     <TextBox x:Name="nameNewObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Efternamn" FontSize="12" />
+                    <Label Content="Efternamn:" FontSize="12" />
                     <TextBox x:Name="familynameNewObserverInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 </StackPanel>
             </StackPanel>
@@ -78,16 +79,30 @@
         </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="2" Grid.Row="2">
             <Label Content="Redigera klimatobservation" FontSize="18" />
-            <Label Content="Namn" FontSize="12" />
-            <TextBox x:Name="nameInput" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+            <Label Content="Mätpunkter i denna observation:" FontSize="12" />
+            <ListBox x:Name="ObservationMeasurements"></ListBox>
+            <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap"/>
+            <Button x:Name="addMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="120"/>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitObservationButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
-                <Button x:Name="deleteObservationButton" Content="Radera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="submitObservationButton" Content="Uppdatera observationen" FontSize="12" Margin="10" Width="150"/>
+                <Button x:Name="deleteObservationButton" Content="Radera hela observationen" FontSize="12" Margin="10" Width="150"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="2"> 
-			<TextBlock Text = "Mätpunkter redigera"/> 
-		</StackPanel> 
+        <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="2">
+            <Label Content="Redigera mätpunkt" FontSize="18" />
+            <Label Content="Kategori:" FontSize="12" />
+            <ListBox x:Name="Categories"></ListBox>
+            <TextBlock Text = "Ändra kategori genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap"/>
+            <Label Content="Värde:" FontSize="12" />
+            <TextBox x:Name="valueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+            <Label Content="Enhet:" FontSize="12" />
+            <ListBox x:Name="Units"></ListBox>
+            <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="submitMeasurementButton" Content="Uppdatera" FontSize="12" Margin="10" Width="150"/>
+                <Button x:Name="deleteMeasurementButton" Content="Radera" FontSize="12" Margin="10" Width="150"/>
+            </StackPanel>
+        </StackPanel> 
 		<StackPanel Orientation = "Vertical" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"> 
 			<Label Content="Detaljer" FontSize="18" />
             <TextBlock Text = "Här visas datan upp lite snyggt efter klimatobservation"  MaxWidth="200" TextWrapping="Wrap"/>
