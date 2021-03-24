@@ -56,7 +56,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitObserverButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="submitObserverButton" Content="Spara" FontSize="12" Margin="10" Width="100"/>
                 <Button x:Name="deleteObserverButton" Content="Radera" FontSize="12" Margin="10" Width="100"/>
             </StackPanel>
         </StackPanel>
@@ -73,7 +73,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitNewObserverButton" Content="Uppdatera" FontSize="12" Margin="10" Width="100"/>
+                <Button x:Name="submitNewObserverButton" Content="Spara" FontSize="12" Margin="10" Width="100"/>
                 <Button x:Name="cancelObserverButton" Content="Avbryt" FontSize="12" Margin="10" Width="100"/>
             </StackPanel>
         </StackPanel>
@@ -84,8 +84,9 @@
             <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap"/>
             <Button x:Name="addMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="120"/>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitObservationButton" Content="Uppdatera observationen" FontSize="12" Margin="10" Width="150"/>
-                <Button x:Name="deleteObservationButton" Content="Radera hela observationen" FontSize="12" Margin="10" Width="150"/>
+                <Button x:Name="submitObservationButton" Content="Spara" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="deleteObservationButton" Content="Radera" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="cancelObservationButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation = "Vertical" Grid.Column="3" Grid.Row="2">
@@ -99,14 +100,17 @@
             <ListBox x:Name="Units"></ListBox>
             <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap"/>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="submitMeasurementButton" Content="Uppdatera" FontSize="12" Margin="10" Width="150"/>
-                <Button x:Name="deleteMeasurementButton" Content="Radera" FontSize="12" Margin="10" Width="150"/>
+                <Button x:Name="submitMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="deleteMeasurementButton" Content="Radera" FontSize="12" Margin="10" Width="50"/>
+                <Button x:Name="cancelMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50"/>
             </StackPanel>
         </StackPanel> 
 		<StackPanel Orientation = "Vertical" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"> 
 			<Label Content="Detaljer" FontSize="18" />
-            <TextBlock Text = "Här visas datan upp lite snyggt efter klimatobservation"  MaxWidth="200" TextWrapping="Wrap"/>
-            <TextBlock Text = "Eftersom det kan finnas flera mätpunkter skulle vi kunna generera den informationen via C# :)"  MaxWidth="200" TextWrapping="Wrap"/>			
+            <StackPanel Orientation="Vertical" Name="details">
+            </StackPanel>
+            <TextBlock Text = "Här visas datan upp lite snyggt efter markering i klimatobservation"  MaxWidth="200" TextWrapping="Wrap"/>
+            <TextBlock Text = "Eftersom det kan finnas flera mätpunkter skulle vi kunna generera den informationen via C# gennom att lägga till element i en namngett stackpanel. :)"  MaxWidth="200" TextWrapping="Wrap"/>			
 		</StackPanel> 
 		<StackPanel Orientation = "Horizontal"> 
 			<Button Content="Button" HorizontalAlignment="Left" Margin="730,23,0,0" VerticalAlignment="Top" Click="GetObserver_Click"/>
