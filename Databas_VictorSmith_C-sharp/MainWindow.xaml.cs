@@ -22,47 +22,48 @@ namespace Databas_VictorSmith_C_sharp
     /// </summary>
     public partial class MainWindow : Window
     {
-        // <initialization>
+        #region INITIALIZATION
         public Observer selectedObserver;
         IEnumerable<Observer> listOfObservers;
-        // </initialization>
+        readonly IEnumerable<Observer> initialListOfObservers = CRUD.UpdateObserverList();
+        #endregion
+
+        #region METHODS
+        public void FetchObservers()
+        {
+            listOfObservers = CRUD.UpdateObserverList();
+            Observers.ItemsSource = null;
+            Observers.ItemsSource = listOfObservers;
+        }
+        #endregion
 
         public MainWindow()
         {
             InitializeComponent();
+            Observers.ItemsSource = null;
+            Observers.ItemsSource = initialListOfObservers;
         }
 
-        private void GetObserver_Click(object sender, RoutedEventArgs e)
+        private void Observers_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            listOfObservers = CRUD.GetObserver();
-            // Uppdatera listan på användares begäran för att se aktuella observatörer.
-            PresentObservers.ItemsSource = null;
-            PresentObservers.ItemsSource = listOfObservers;
+            selectedObserver = CRUD.GetObserver((sender as ListBox).SelectedItem as Observer);
         }
 
-        private void AddObserver_Click(object sender, RoutedEventArgs e)
+        private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
         {
-            // Lägger till fake-observatörer för att kunna testa funktioner.
-            CRUD.AddObserver();
+            // Lägger till observatörer med För- och efternamn.
+            string firstName, lastName;
+            firstName = NameNewObserverInput.Text.ToString();
+            lastName = FamilyNameNewObserverInput.Text.ToString();
+            CRUD.AddObserver(firstName, lastName);
+            FetchObservers();
         }
-        private void DeleteObserver_Click(object sender, RoutedEventArgs e)
-        {          
+
+        private void DeleteObserverButton_Click(object sender, RoutedEventArgs e)
+        {
             CRUD.DeleteObserver(selectedObserver);
             // Uppdaterar listan för att reflektera vilka observatörer som existerar.
-            PresentObservers.ItemsSource = null;
-            PresentObservers.ItemsSource = listOfObservers;
-        }
-
-        private void PresentObservers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Uppdatera listan så att vald observatör faktiskt finns i databasen.
-            CRUD.GetObserver();
-            selectedObserver = (Observer)PresentObservers.SelectedItem;
-        }
-
-        private void SelectObserver_Click(object sender, RoutedEventArgs e)
-        {
-            CRUD.SelectObserver(PresentObservers.SelectedItem as Observer);
+            FetchObservers();
         }
     }
 }
