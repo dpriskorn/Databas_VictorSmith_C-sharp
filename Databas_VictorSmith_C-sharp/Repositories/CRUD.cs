@@ -220,6 +220,36 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return observations;
             }
         }
+        public static List<Measurement> UpdateMeasurementList(Observation observation)
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateMeasurementList");
+            string stmt = "SELECT id, value, category_id FROM measurement WHERE observation_id = @observationId ORDER BY id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Measurement instance;
+                List<Measurement> measurements = new List<Measurement>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            instance = new Measurement()
+                            {
+                                Id = (int)reader["id"],
+                                Value = (string)reader["value"],
+                                Category_Id = (int)reader["category_id"],
+                            };
+                            measurements.Add(instance);
+                        };
+                    }
+                }
+                conn.Close();
+                return measurements;
+            }
+        }
         #endregion
 
         #region UPDATE

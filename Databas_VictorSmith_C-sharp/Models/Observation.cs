@@ -12,7 +12,7 @@ namespace Databas_VictorSmith_C_sharp.Models
         public int Geolocation_Id { get; set; }
         public override string ToString()
         {
-            return string.Format("{0}: {1}", Id, Date);
+            return string.Format("{0}: {1}", Id, Date.ToShortDateString());
         }
     }
 }

@@ -43,6 +43,12 @@ namespace Databas_VictorSmith_C_sharp
             List<Observation> listOfObservations = CRUD.UpdateObservationList(observer);
             UpdateObservationsListbox(listOfObservations);
         }
+        public void FetchMeasurements(Observation observation)
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
+            List<Measurement> listOfMeasurements = CRUD.UpdateMeasurementList(observation);
+            UpdateMeasurementsListbox(listOfMeasurements);
+        }
         #endregion
         #region UIMETHODS
         public void UpdateObserversListbox(List<Observer> list)
