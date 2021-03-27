@@ -187,6 +187,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region DELETE
         public static string DeleteObserver(Observer obs)
         {
+            //FIXME handle no observer selected by showing a popup that tells the user to select one first in the list
             string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -202,6 +203,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                     {
                         if (ex.ToString().Contains("23503"))
                         {
+                            //FIXME after this box was shown there is a null error for some reason
                             return (MessageBox.Show("Observatören du försöker ta bort har gjort observationer som måste raderas först.").ToString());
                         }
                     }
