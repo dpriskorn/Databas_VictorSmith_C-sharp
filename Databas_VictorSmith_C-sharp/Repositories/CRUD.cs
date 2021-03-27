@@ -11,9 +11,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
 
     public static class CRUD
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["dblocal"].ConnectionString;
-
-
+        readonly private static string connectionString = ConfigurationManager.ConnectionStrings["dblocal"].ConnectionString;
 
         #region CREATE
         public static void AddObserver(string firstName, string lastName)
@@ -114,10 +112,10 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #endregion
 
         #region READ
-        public static Observer GetObserver(Observer ob)
+        public static Observer GetObserver(Observer observer)
         {
             // Guard against ob==null after deleting an observer.
-            if (ob != null)
+            if (observer != null)
             {
                 System.Diagnostics.Trace.WriteLine($"CRUD:GetObserver");
                 string stmt = "SELECT id, firstname, lastname FROM observer WHERE id = @observerId";
@@ -129,7 +127,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                     {
                         try
                         {
-                            command.Parameters.Add(new NpgsqlParameter("observerId", ob.Id));
+                            command.Parameters.Add(new NpgsqlParameter("observerId", observer.Id));
                             using (var reader = command.ExecuteReader())
                             {
                                 while (reader.Read())
@@ -190,7 +188,38 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return observers;
             }
         }
-
+        
+        public static List<Observation> UpdateObservationList(Observer observer)
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateObservationList");
+            string stmt = "SELECT id, date, geolocation_id FROM observation WHERE observer_id = @observerId ORDER BY id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Observation obs;
+                List<Observation> observations = new List<Observation>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    command.Parameters.Add(new NpgsqlParameter("observerId", observer.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            obs = new Observation()
+                            {
+                                Id = (int)reader["id"],
+                                Date = (DateTime)reader["date"],
+                                //Observer_Id = (int)reader["observer_id"],
+                                Geolocation_Id = (int)reader["geolocation_id"],
+                            };
+                            observations.Add(obs);
+                        };
+                    }
+                }
+                conn.Close();
+                return observations;
+            }
+        }
         #endregion
 
         #region UPDATE

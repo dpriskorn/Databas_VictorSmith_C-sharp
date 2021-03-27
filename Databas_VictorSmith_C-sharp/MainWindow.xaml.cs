@@ -37,12 +37,12 @@ namespace Databas_VictorSmith_C_sharp
             listOfObservers = CRUD.GetObserverList();
             UpdateObserversListbox(listOfObservers);
         }
-        //public void FetchObservations()
-        //{
-        //    System.Diagnostics.Trace.WriteLine($"Updating observations");
-        //    listOfObservations = CRUD.UpdateObservationList();
-        //    UpdateObservations(listOfObservations);
-        //}
+        public void FetchObservations(Observer observer)
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchObservations");
+            List<Observation> listOfObservations = CRUD.UpdateObservationList(observer);
+            UpdateObservationsListbox(listOfObservations);
+        }
         #endregion
         #region UIMETHODS
         public void UpdateObserversListbox(List<Observer> list)
@@ -73,7 +73,7 @@ namespace Databas_VictorSmith_C_sharp
             // Update the global variable
             System.Diagnostics.Trace.WriteLine($"MainWindow:Observers_SelectionChanged");
             selectedObserver = CRUD.GetObserver((sender as ListBox).SelectedItem as Observer);
-            //FetchObservations(selectedObserver);
+            FetchObservations(selectedObserver);
         }
 
         private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
