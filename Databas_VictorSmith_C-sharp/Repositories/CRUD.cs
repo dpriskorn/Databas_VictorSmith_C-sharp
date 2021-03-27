@@ -116,42 +116,49 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region READ
         public static Observer GetObserver(Observer ob)
         {
-            System.Diagnostics.Trace.WriteLine($"CRUD:GetObserver");
-            string stmt = "SELECT id, firstname, lastname FROM observer WHERE id = @observerId";
-            using (var conn = new NpgsqlConnection(connectionString))
+            // Guard against ob==null after deleting an observer.
+            if (ob != null)
             {
-                Observer obs = new Observer();                
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
+                System.Diagnostics.Trace.WriteLine($"CRUD:GetObserver");
+                string stmt = "SELECT id, firstname, lastname FROM observer WHERE id = @observerId";
+                using (var conn = new NpgsqlConnection(connectionString))
                 {
-                    try
+                    Observer obs = new Observer();
+                    conn.Open();
+                    using (var command = new NpgsqlCommand(stmt, conn))
                     {
-                        command.Parameters.Add(new NpgsqlParameter("observerId", ob.Id));
-                        using (var reader = command.ExecuteReader())
+                        try
                         {
-                            while (reader.Read())
+                            command.Parameters.Add(new NpgsqlParameter("observerId", ob.Id));
+                            using (var reader = command.ExecuteReader())
                             {
-                                Observer o;
-                                o = new Observer()
+                                while (reader.Read())
                                 {
-                                    Id = (int)reader["id"],
-                                    FirstName = (string)reader["firstname"],
-                                    LastName = (string)reader["lastname"]
+                                    Observer o;
+                                    o = new Observer()
+                                    {
+                                        Id = (int)reader["id"],
+                                        FirstName = (string)reader["firstname"],
+                                        LastName = (string)reader["lastname"]
+                                    };
+                                    obs = o;
                                 };
-                                obs = o;
-                            };
+                            }
                         }
-                }
-                    catch (NullReferenceException)
-                    {
-                        GetObserverList();
+                        catch (NullReferenceException)
+                        {
+                            GetObserverList();
+                        }
+
                     }
-
+                    conn.Close();
+                    return obs;
                 }
-                conn.Close();
-                return obs;
             }
-
+            else
+            {
+                return null;
+            }
         }
         public static List<Observer> GetObserverList()
         {
@@ -164,18 +171,20 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 conn.Open();
                 //FIXME 2 using not good?
                 using (var command = new NpgsqlCommand(stmt, conn))
-                using (var reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    using (var reader = command.ExecuteReader())
                     {
-                        obs = new Observer()
+                        while (reader.Read())
                         {
-                            Id = (int)reader["id"],
-                            FirstName = (string)reader["firstname"],
-                            LastName = (string)reader["lastname"]
+                            obs = new Observer()
+                            {
+                                Id = (int)reader["id"],
+                                FirstName = (string)reader["firstname"],
+                                LastName = (string)reader["lastname"]
+                            };
+                            observers.Add(obs);
                         };
-                        observers.Add(obs);
-                    };
+                    }
                 }
                 conn.Close();
                 return observers;
@@ -191,36 +200,29 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region DELETE
         public static string DeleteObserver(Observer obs)
         {
-            if (obs != null) {
-                string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
-                using (var conn = new NpgsqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (var command = new NpgsqlCommand(stmt, conn))
+            string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
 
+                {
+                    try
                     {
-                        try
+                        using var reader = command.ExecuteReader();
+                    }
+                    catch (NpgsqlException ex)
+                    {
+                        if (ex.ToString().Contains("23503"))
                         {
-                            using var reader = command.ExecuteReader();
-                        }
-                        catch (NpgsqlException ex)
-                        {
-                            if (ex.ToString().Contains("23503"))
-                            {
-                                //FIXME after this box was shown there is a null error for some reason
-                                return (MessageBox.Show("Observatören du försöker ta bort har gjort observationer som måste raderas först.").ToString());
-                            }
+                            //FIXME after this box was shown there is a null error for some reason
+                            return (MessageBox.Show("Observatören du försöker ta bort har gjort observationer som måste raderas först.").ToString());
                         }
                     }
-                    conn.Close();
                 }
-                return MessageBox.Show("Observatören är nu borttagen.").ToString();
+                conn.Close();
             }
-            else
-            {
-                return MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
-            }
-            
+            return MessageBox.Show("Observatören är nu borttagen.").ToString();
         }
         #endregion
     }

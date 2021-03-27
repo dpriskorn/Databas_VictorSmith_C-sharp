@@ -23,17 +23,19 @@ namespace Databas_VictorSmith_C_sharp
     public partial class MainWindow : Window
     {
         #region INITIALIZATION
-        public Observer selectedObserver;
-        List<Observer> listOfObservers;
+        public Observer selectedObserver = null;
+        List<Observer> listOfObservers = null;
+        //System.Diagnostics.Trace.WriteLine($"MainWindow:INITIALIZATION");
         readonly List<Observer> initialListOfObservers = CRUD.GetObserverList();
         #endregion
 
         #region FETCHMETHODS
         public void FetchObservers()
         {
-            System.Diagnostics.Trace.WriteLine($"Updating observers");
-            List<Observer> listOfObservers = CRUD.GetObserverList();
-            UpdateObservers(listOfObservers);
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchObservers");
+            // Update global variable
+            listOfObservers = CRUD.GetObserverList();
+            UpdateObserversListbox(listOfObservers);
         }
         //public void FetchObservations()
         //{
@@ -43,17 +45,17 @@ namespace Databas_VictorSmith_C_sharp
         //}
         #endregion
         #region UIMETHODS
-        public void UpdateObservers(List<Observer> list)
+        public void UpdateObserversListbox(List<Observer> list)
         {
             Observers.ItemsSource = null;
             Observers.ItemsSource = list;
         }
-        public void UpdateObservations(List<Observation> list)
+        public void UpdateObservationsListbox(List<Observation> list)
         {
             Observations.ItemsSource = null;
             Observations.ItemsSource = list;
         }
-        public void UpdateMeasurements(List<Measurement> list)
+        public void UpdateMeasurementsListbox(List<Measurement> list)
         {
             observationMeasurements.ItemsSource = null;
             observationMeasurements.ItemsSource = list;
@@ -68,6 +70,8 @@ namespace Databas_VictorSmith_C_sharp
 
         private void Observers_SelectionChanged(object sender, RoutedEventArgs e)
         {
+            // Update the global variable
+            System.Diagnostics.Trace.WriteLine($"MainWindow:Observers_SelectionChanged");
             selectedObserver = CRUD.GetObserver((sender as ListBox).SelectedItem as Observer);
             //FetchObservations(selectedObserver);
         }
@@ -86,9 +90,18 @@ namespace Databas_VictorSmith_C_sharp
 
         private void DeleteObserverButton_Click(object sender, RoutedEventArgs e)
         {
-            CRUD.DeleteObserver(selectedObserver);
-            // Uppdaterar listan för att reflektera vilka observatörer som existerar.
-            //FetchObservers();
+            if (selectedObserver == null)
+            {
+                MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
+            }
+            else
+            {
+                // Use the global variable
+                CRUD.DeleteObserver(selectedObserver);
+                selectedObserver = null;
+                // Uppdaterar listan för att reflektera vilka observatörer som existerar.
+                FetchObservers();
+            }
         }
 
         private void AddObserverButton_Click(object sender, RoutedEventArgs e)
