@@ -65,5 +65,10 @@ namespace Databas_VictorSmith_C_sharp
             // Uppdaterar listan för att reflektera vilka observatörer som existerar.
             FetchObservers();
         }
+
+        private void AddObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddObserverBox.Visibility = Visibility.Visible;
+        }
     }
 }

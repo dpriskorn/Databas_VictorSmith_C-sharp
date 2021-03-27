@@ -34,7 +34,7 @@
                 <TextBlock Text = "Markera för att se observationer, dubbelklicka för att redigera observatören." MaxWidth="250" TextWrapping="Wrap" Margin="5" FontSize="10"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="DeleteObserverButton" Content="Radera" FontSize="12" Width="100" Click="DeleteObserverButton_Click" Margin="5"/>
-                    <Button x:Name="AddObserverButton" Content="Lägg till observatör" FontSize="12" Width="130" Margin="5"/>
+                    <Button x:Name="AddObserverButton" Content="Lägg till observatör" FontSize="12" Width="130" Margin="5" Click="AddObserverButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -70,7 +70,7 @@
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Lägg till klimatobservatör" Grid.Column="1" Grid.Row="2" x:Name="AddObserverBox" Visibility="Hidden">
-            <StackPanel Orientation = "Vertical" Margin="0,175,0,240" Grid.RowSpan="2">
+            <StackPanel Orientation = "Vertical">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <Label Content="Förnamn:" FontSize="12" />
