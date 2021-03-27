@@ -196,8 +196,16 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void AddMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            AddMeasurementBox.Visibility = Visibility.Visible;
-            //TODO populate listOfNewMeasurements
+            // Add and edit boxes share screen real estate and cannot both be shown
+            if (EditMeasurementBox.Visibility == Visibility.Visible)
+            {
+                EditMeasurementBox.Visibility = Visibility.Hidden;
+                AddMeasurementBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AddMeasurementBox.Visibility = Visibility.Visible;
+            }
         }
         #endregion
 
@@ -248,7 +256,16 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void EditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            EditMeasurementBox.Visibility = Visibility.Visible;
+            // Add and edit boxes share screen real estate and cannot both be shown
+            if (AddMeasurementBox.Visibility == Visibility.Visible)
+            {
+                AddMeasurementBox.Visibility = Visibility.Hidden;
+                EditMeasurementBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EditMeasurementBox.Visibility = Visibility.Visible;
+            }
         }
         #endregion
 
