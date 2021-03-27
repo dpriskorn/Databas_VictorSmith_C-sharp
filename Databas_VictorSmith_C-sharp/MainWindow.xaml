@@ -6,7 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Databas_VictorSmith_C_sharp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="960" Width="900">
+        Title="Klimatobservationsprogram"
+        WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -31,18 +32,23 @@
             <StackPanel Orientation = "Vertical">
                 <!--<Label Content="Klimatobservatörer" FontSize="18" />-->
                 <ListBox x:Name="Observers" Height="75" MaxHeight="100" SelectionChanged="Observers_SelectionChanged"></ListBox>
-                <TextBlock Text = "Markera för att se observationer, dubbelklicka för att redigera observatören." MaxWidth="250" TextWrapping="Wrap" Margin="5" FontSize="10"/>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="DeleteObserverButton" Content="Radera" FontSize="12" Width="100" Click="DeleteObserverButton_Click" Margin="5"/>
-                    <Button x:Name="AddObserverButton" Content="Lägg till observatör" FontSize="12" Width="130" Margin="5" Click="AddObserverButton_Click"/>
+                <TextBlock Text = "Markera för att se observationer." MaxWidth="250" TextWrapping="Wrap" Margin="5" FontSize="10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="AddObserverButton" Content="Lägg till observatör" FontSize="12" Width="110" Margin="5" Click="AddObserverButton_Click"/>
+                    <Button x:Name="EditObserverButton" Content="Rediger observatör" FontSize="12" Width="110" Margin="5"/>
+                    <Button x:Name="DeleteObserverButton" Content="Radera" FontSize="12" Width="60" Click="DeleteObserverButton_Click" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Klimatobservationer" Grid.Column="2" Grid.Row="1" x:Name="ObservationsBox">
             <StackPanel Orientation = "Vertical">
                 <ListBox x:Name="Observations" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera för att se detaljer, dubbelklicka för att redigera." MaxWidth="250" TextWrapping="Wrap" Margin="5" FontSize="10"/>
-                <Button x:Name="NewObservationButton" Content="Lägg till observation" FontSize="12" Margin="10" Width="130"/>
+                <TextBlock Text = "Markera för att se detaljer." MaxWidth="250" TextWrapping="Wrap" Margin="5" FontSize="10" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="NewObservationButton" Content="Lägg till observation" FontSize="12" Margin="5" Width="120"/>
+                    <Button x:Name="EditObservationButton" Content="Rediger observation" FontSize="12" Width="130" Margin="5"/>
+                </StackPanel>
+                <Button x:Name="DeleteObservationButton" Content="Radera observationen (inkl. alla mätpunkter)" FontSize="12" Margin="5" Width="240"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Detaljer" Grid.Column="3" Grid.Row="1" x:Name="DetailsBox">
@@ -103,7 +109,6 @@
                     <Button x:Name="EditMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110"/>
                     <Button x:Name="DeleteMeasurementButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100"/>
                 </StackPanel>
-                <Button x:Name="DeleteObservationButton" Content="Radera observationen och alla mätpunkter" FontSize="12" Margin="10" Width="230"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Lägg till klimatobservation" Grid.Column="2" Grid.Row="3" x:Name="AddObservationBox" Visibility="Hidden">
