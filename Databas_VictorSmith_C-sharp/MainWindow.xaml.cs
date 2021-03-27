@@ -27,6 +27,7 @@ namespace Databas_VictorSmith_C_sharp
     {
         #region INITIALIZATION
         public Observer selectedObserver = null;
+        public Observation selectedObservation = null;
         List<Observer> listOfObservers = null;
         List<Measurement> listOfNewMeasurements = null;
         List<Measurement> listOfMeasurements = null;
@@ -78,7 +79,7 @@ namespace Databas_VictorSmith_C_sharp
             Observers.ItemsSource = null;
             Observers.ItemsSource = initialListOfObservers;
         }
-
+        #region SELECTION
         private void Observers_SelectionChanged(object sender, RoutedEventArgs e)
         {
             // Update the global variable
@@ -86,7 +87,17 @@ namespace Databas_VictorSmith_C_sharp
             selectedObserver = CRUD.GetObserver((sender as ListBox).SelectedItem as Observer);
             FetchObservations(selectedObserver);
         }
+        private void Observations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Update the global variable
+            System.Diagnostics.Trace.WriteLine($"MainWindow:Observations_SelectionChanged");
+            selectedObservation = CRUD.GetObservation((sender as ListBox).SelectedItem as Observation);
+            //TODO fetch measurements?
+            //FetchObservations(selectedObserver);
+        }
+        #endregion
 
+        #region SUBMIT
         private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
         {
             // Lägger till observatörer med För- och efternamn.
@@ -101,7 +112,29 @@ namespace Databas_VictorSmith_C_sharp
             FamilyNameNewObserverInput.Text = "";
             FetchObservers();
         }
+        private void SubmitObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO commit mätpunktslista efter skapad observation med id.
+        }
+        private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO add measurement to listOfNewMeasurements
+        }
+        private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO commit to db
+        }
+        #endregion
 
+        #region DELETE
         private void DeleteObserverButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectedObserver == null)
@@ -117,7 +150,17 @@ namespace Databas_VictorSmith_C_sharp
                 FetchObservers();
             }
         }
+        private void DeleteObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        private void DeleteMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        #endregion
 
+        #region ADD
         private void AddObserverButton_Click(object sender, RoutedEventArgs e)
         {
             // Add and edit boxes share screen real estate and cannot both be shown
@@ -131,7 +174,34 @@ namespace Databas_VictorSmith_C_sharp
                 AddObserverBox.Visibility = Visibility.Visible;
             }
         }
+        private void AddObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedObserver != null)
+            {
+                // Add and edit boxes share screen real estate and cannot both be shown
+                if (EditObservationBox.Visibility == Visibility.Visible)
+                {
+                    EditObservationBox.Visibility = Visibility.Hidden;
+                    AddObservationBox.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    AddObservationBox.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ingen observatör vald. Välj observatör först.").ToString();
+            }
+        }
+        private void AddMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddMeasurementBox.Visibility = Visibility.Visible;
+            //TODO populate listOfNewMeasurements
+        }
+        #endregion
 
+        #region EDIT
         private void EditObserverButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectedObserver != null)
@@ -141,72 +211,56 @@ namespace Databas_VictorSmith_C_sharp
                 {
                     AddObserverBox.Visibility = Visibility.Hidden;
                     EditObserverBox.Visibility = Visibility.Visible;
-                    // populate 
-                    NameObserverInput.Text = selectedObserver.FirstName;
-                    FamilyNameObserverInput.Text = selectedObserver.LastName;
                 }
                 else
                 {
                     EditObserverBox.Visibility = Visibility.Visible;
-                    NameObserverInput.Text = selectedObserver.FirstName;
-                    FamilyNameObserverInput.Text = selectedObserver.LastName;
                 }
+
+                NameObserverInput.Text = selectedObserver.FirstName;
+                FamilyNameObserverInput.Text = selectedObserver.LastName;
             }
             else
             {
                 MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
             }
         }
-
-        private void NewObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddObservationBox.Visibility = Visibility.Visible;
-        }
-
         private void EditObservationButton_Click(object sender, RoutedEventArgs e)
         {
-            EditObservationBox.Visibility = Visibility.Visible;
+            if (selectedObservation != null)
+            {
+                // Add and edit boxes share screen real estate and cannot both be shown
+                if (AddObservationBox.Visibility == Visibility.Visible)
+                {
+                    AddObservationBox.Visibility = Visibility.Hidden;
+                    EditObservationBox.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    EditObservationBox.Visibility = Visibility.Visible;
+                }
+                FetchMeasurements(selectedObservation);
+            }
+            else
+            {
+                MessageBox.Show("Ingen observation vald. Välj observation i listan.").ToString();
+            }
         }
-
-        private void DeleteObservationButton_Click(object sender, RoutedEventArgs e)
+        private void EditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            EditMeasurementBox.Visibility = Visibility.Visible;
         }
-      
+        #endregion
+
+        #region CANCEL
         private void CancelNewObserverButton_Click(object sender, RoutedEventArgs e)
         {
             AddObserverBox.Visibility = Visibility.Hidden;
         }
 
-        private void SubmitObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
-
         private void CancelObservationButton_Click(object sender, RoutedEventArgs e)
         {
             EditObservationBox.Visibility = Visibility.Hidden;
-        }
-
-        private void AddMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddMeasurementBox.Visibility = Visibility.Visible;
-            //TODO populate listOfNewMeasurements
-        }
-
-        private void EditMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditMeasurementBox.Visibility = Visibility.Visible;
-        }
-
-        private void DeleteMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
-
-        private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO commit mätpunktslista efter skapad observation med id.
         }
 
         private void CancelNewObservationButton_Click(object sender, RoutedEventArgs e)
@@ -215,19 +269,9 @@ namespace Databas_VictorSmith_C_sharp
             AddObservationBox.Visibility = Visibility.Hidden;
         }
 
-        private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
-
         private void CancelEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             EditMeasurementBox.Visibility = Visibility.Hidden;
-        }
-
-        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO add measurement to listOfNewMeasurements
         }
 
         private void CancelNewMeasurementButton_Click(object sender, RoutedEventArgs e)
@@ -236,16 +280,13 @@ namespace Databas_VictorSmith_C_sharp
             listOfNewMeasurements = null;
         }
 
-        private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO commit to db
-        }
-
         private void CancelEditObserverButton_Click(object sender, RoutedEventArgs e)
         {
             EditObserverBox.Visibility = Visibility.Hidden;
             // we dont't clear the fields, because they get populated every time anyways
         }
+        #endregion
+
 
         //private void AddNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         //{

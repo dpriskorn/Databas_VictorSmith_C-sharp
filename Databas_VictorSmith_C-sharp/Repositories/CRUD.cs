@@ -158,6 +158,54 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return null;
             }
         }
+        public static Observation GetObservation(Observation observation)
+        {
+            // Guard against ob==null after deleting an observation.
+            if (observation != null)
+            {
+                System.Diagnostics.Trace.WriteLine($"CRUD:GetObservation");
+                string stmt = "SELECT id, date, observer_id, geolocation_id FROM observation WHERE id = @observationId";
+                using (var conn = new NpgsqlConnection(connectionString))
+                {
+                    Observation obs = new Observation();
+                    conn.Open();
+                    using (var command = new NpgsqlCommand(stmt, conn))
+                    {
+                        try
+                        {
+                            command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Observation o;
+                                    o = new Observation()
+                                    {
+                                        Id = (int)reader["id"],
+                                        Date = (DateTime)reader["date"],
+                                        Observer_Id = (int)reader["observer_id"],
+                                        Geolocation_Id = (int)reader["geolocation_id"],
+                                    };
+                                    obs = o;
+                                };
+                            }
+                        }
+                        catch (NullReferenceException)
+                        {
+                            MessageBox.Show("NullReferenceException.").ToString();
+                            //GetObservationList();
+                        }
+
+                    }
+                    conn.Close();
+                    return obs;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
         public static List<Observer> GetObserverList()
         {
             System.Diagnostics.Trace.WriteLine($"CRUD:GetObserverList");
