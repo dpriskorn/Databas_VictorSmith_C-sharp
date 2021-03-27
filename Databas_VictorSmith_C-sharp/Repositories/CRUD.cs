@@ -296,7 +296,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                             instance = new Measurement()
                             {
                                 Id = (int)reader["id"],
-                                Value = (string)reader["value"],
+                                Value = (double)reader["value"],
                                 Category_Id = (int)reader["category_id"],
                             };
                             measurements.Add(instance);

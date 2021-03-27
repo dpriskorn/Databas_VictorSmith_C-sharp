@@ -9,6 +9,6 @@ namespace Databas_VictorSmith_C_sharp.Models
         public int Id { get; set; }
         public int Category_Id { get; set; }
         public int Observation_Id { get; set; }
-        public string Value { get; set; }
+        public double Value { get; set; }
     }
 }
