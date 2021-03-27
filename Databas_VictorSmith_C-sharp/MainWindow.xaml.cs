@@ -24,19 +24,41 @@ namespace Databas_VictorSmith_C_sharp
     {
         #region INITIALIZATION
         public Observer selectedObserver;
-        IEnumerable<Observer> listOfObservers;
-        readonly IEnumerable<Observer> initialListOfObservers = CRUD.UpdateObserverList();
+        List<Observer> listOfObservers;
+        readonly List<Observer> initialListOfObservers = CRUD.GetObserverList();
         #endregion
 
-        #region METHODS
+        #region FETCHMETHODS
         public void FetchObservers()
         {
-            listOfObservers = CRUD.UpdateObserverList();
+            System.Diagnostics.Trace.WriteLine($"Updating observers");
+            List<Observer> listOfObservers = CRUD.GetObserverList();
+            UpdateObservers(listOfObservers);
+        }
+        //public void FetchObservations()
+        //{
+        //    System.Diagnostics.Trace.WriteLine($"Updating observations");
+        //    listOfObservations = CRUD.UpdateObservationList();
+        //    UpdateObservations(listOfObservations);
+        //}
+        #endregion
+        #region UIMETHODS
+        public void UpdateObservers(List<Observer> list)
+        {
             Observers.ItemsSource = null;
-            Observers.ItemsSource = listOfObservers;
+            Observers.ItemsSource = list;
+        }
+        public void UpdateObservations(List<Observation> list)
+        {
+            Observations.ItemsSource = null;
+            Observations.ItemsSource = list;
+        }
+        public void UpdateMeasurements(List<Measurement> list)
+        {
+            observationMeasurements.ItemsSource = null;
+            observationMeasurements.ItemsSource = list;
         }
         #endregion
-
         public MainWindow()
         {
             InitializeComponent();
@@ -47,6 +69,7 @@ namespace Databas_VictorSmith_C_sharp
         private void Observers_SelectionChanged(object sender, RoutedEventArgs e)
         {
             selectedObserver = CRUD.GetObserver((sender as ListBox).SelectedItem as Observer);
+            //FetchObservations(selectedObserver);
         }
 
         private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
@@ -56,6 +79,8 @@ namespace Databas_VictorSmith_C_sharp
             firstName = NameNewObserverInput.Text.ToString();
             lastName = FamilyNameNewObserverInput.Text.ToString();
             CRUD.AddObserver(firstName, lastName);
+            MessageBox.Show($"Observatör tillagd.");
+            AddObserverBox.Visibility = Visibility.Hidden;
             FetchObservers();
         }
 
@@ -63,7 +88,7 @@ namespace Databas_VictorSmith_C_sharp
         {
             CRUD.DeleteObserver(selectedObserver);
             // Uppdaterar listan för att reflektera vilka observatörer som existerar.
-            FetchObservers();
+            //FetchObservers();
         }
 
         private void AddObserverButton_Click(object sender, RoutedEventArgs e)

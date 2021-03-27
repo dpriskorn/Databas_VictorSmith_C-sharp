@@ -99,6 +99,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
 
         public static void AddMeasurement()
         {
+            //TODO
             string stmt = "INSERT INTO x VALUES y";
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -115,6 +116,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region READ
         public static Observer GetObserver(Observer ob)
         {
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetObserver");
             string stmt = "SELECT id, firstname, lastname FROM observer WHERE id = @observerId";
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -142,7 +144,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 }
                     catch (NullReferenceException)
                     {
-                        UpdateObserverList();
+                        GetObserverList();
                     }
 
                 }
@@ -151,14 +153,16 @@ namespace Databas_VictorSmith_C_sharp.Repositories
             }
 
         }
-        public static List<Observer> UpdateObserverList()
+        public static List<Observer> GetObserverList()
         {
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetObserverList");
             string stmt = "SELECT id, firstname, lastname FROM observer ORDER BY lastname";
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 Observer obs;
                 List<Observer> observers = new List<Observer>();
                 conn.Open();
+                //FIXME 2 using not good?
                 using (var command = new NpgsqlCommand(stmt, conn))
                 using (var reader = command.ExecuteReader())
                 {
@@ -187,30 +191,36 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #region DELETE
         public static string DeleteObserver(Observer obs)
         {
-            //FIXME handle no observer selected by showing a popup that tells the user to select one first in the list
-            string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
-            using (var conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
-
+            if (obs != null) {
+                string stmt = "DELETE FROM observer WHERE id=" + obs.Id;
+                using (var conn = new NpgsqlConnection(connectionString))
                 {
-                    try
+                    conn.Open();
+                    using (var command = new NpgsqlCommand(stmt, conn))
+
                     {
-                        using var reader = command.ExecuteReader();
-                    }
-                    catch (NpgsqlException ex)
-                    {
-                        if (ex.ToString().Contains("23503"))
+                        try
                         {
-                            //FIXME after this box was shown there is a null error for some reason
-                            return (MessageBox.Show("Observatören du försöker ta bort har gjort observationer som måste raderas först.").ToString());
+                            using var reader = command.ExecuteReader();
+                        }
+                        catch (NpgsqlException ex)
+                        {
+                            if (ex.ToString().Contains("23503"))
+                            {
+                                //FIXME after this box was shown there is a null error for some reason
+                                return (MessageBox.Show("Observatören du försöker ta bort har gjort observationer som måste raderas först.").ToString());
+                            }
                         }
                     }
+                    conn.Close();
                 }
-                conn.Close();
+                return MessageBox.Show("Observatören är nu borttagen.").ToString();
             }
-            return MessageBox.Show("Observatören är nu borttagen.").ToString();
+            else
+            {
+                return MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
+            }
+            
         }
         #endregion
     }
