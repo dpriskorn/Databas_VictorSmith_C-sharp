@@ -151,7 +151,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
             }
 
         }
-        public static IEnumerable<Observer> UpdateObserverList()
+        public static List<Observer> UpdateObserverList()
         {
             string stmt = "SELECT id, firstname, lastname FROM observer ORDER BY lastname";
             using (var conn = new NpgsqlConnection(connectionString))
