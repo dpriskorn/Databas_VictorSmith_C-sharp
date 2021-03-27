@@ -191,33 +191,42 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         
         public static List<Observation> UpdateObservationList(Observer observer)
         {
-            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateObservationList");
-            string stmt = "SELECT id, date, geolocation_id FROM observation WHERE observer_id = @observerId ORDER BY id";
-            using (var conn = new NpgsqlConnection(connectionString))
+            //FIXME guard agains observer==null 
+            // Guard against ob==null after deleting an observer.
+            if (observer != null)
             {
-                Observation obs;
-                List<Observation> observations = new List<Observation>();
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
+                System.Diagnostics.Trace.WriteLine($"CRUD:UpdateObservationList");
+                string stmt = "SELECT id, date, geolocation_id FROM observation WHERE observer_id = @observerId ORDER BY id";
+                using (var conn = new NpgsqlConnection(connectionString))
                 {
-                    command.Parameters.Add(new NpgsqlParameter("observerId", observer.Id));
-                    using (var reader = command.ExecuteReader())
+                    Observation obs;
+                    List<Observation> observations = new List<Observation>();
+                    conn.Open();
+                    using (var command = new NpgsqlCommand(stmt, conn))
                     {
-                        while (reader.Read())
+                        command.Parameters.Add(new NpgsqlParameter("observerId", observer.Id));
+                        using (var reader = command.ExecuteReader())
                         {
-                            obs = new Observation()
+                            while (reader.Read())
                             {
-                                Id = (int)reader["id"],
-                                Date = (DateTime)reader["date"],
-                                //Observer_Id = (int)reader["observer_id"],
-                                Geolocation_Id = (int)reader["geolocation_id"],
+                                obs = new Observation()
+                                {
+                                    Id = (int)reader["id"],
+                                    Date = (DateTime)reader["date"],
+                                    //Observer_Id = (int)reader["observer_id"],
+                                    Geolocation_Id = (int)reader["geolocation_id"],
+                                };
+                                observations.Add(obs);
                             };
-                            observations.Add(obs);
-                        };
+                        }
                     }
+                    conn.Close();
+                    return observations;
                 }
-                conn.Close();
-                return observations;
+            }
+            else
+            {
+                return null;
             }
         }
         public static List<Measurement> UpdateMeasurementList(Observation observation)

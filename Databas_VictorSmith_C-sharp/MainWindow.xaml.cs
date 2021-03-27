@@ -19,12 +19,17 @@ namespace Databas_VictorSmith_C_sharp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// Measurements added will be held in a list until submitted.
+    /// Measurements edited will be submitted at once.
+    /// Measurements deleted will be submitted at once.
     /// </summary>
     public partial class MainWindow : Window
     {
         #region INITIALIZATION
         public Observer selectedObserver = null;
         List<Observer> listOfObservers = null;
+        List<Measurement> listOfNewMeasurements = null;
+        List<Measurement> listOfMeasurements = null;
         //System.Diagnostics.Trace.WriteLine($"MainWindow:INITIALIZATION");
         readonly List<Observer> initialListOfObservers = CRUD.GetObserverList();
         #endregion
@@ -91,6 +96,9 @@ namespace Databas_VictorSmith_C_sharp
             CRUD.AddObserver(firstName, lastName);
             MessageBox.Show($"Observatör tillagd.");
             AddObserverBox.Visibility = Visibility.Hidden;
+            // clear fields
+            NameNewObserverInput.Text = "";
+            FamilyNameNewObserverInput.Text = "";
             FetchObservers();
         }
 
@@ -112,7 +120,141 @@ namespace Databas_VictorSmith_C_sharp
 
         private void AddObserverButton_Click(object sender, RoutedEventArgs e)
         {
-            AddObserverBox.Visibility = Visibility.Visible;
+            // Add and edit boxes share screen real estate and cannot both be shown
+            if (EditObserverBox.Visibility == Visibility.Visible)
+            {
+                EditObserverBox.Visibility = Visibility.Hidden;
+                AddObserverBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AddObserverBox.Visibility = Visibility.Visible;
+            }
         }
+
+        private void EditObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedObserver != null)
+            {
+                // Add and edit boxes share screen real estate and cannot both be shown
+                if (AddObserverBox.Visibility == Visibility.Visible)
+                {
+                    AddObserverBox.Visibility = Visibility.Hidden;
+                    EditObserverBox.Visibility = Visibility.Visible;
+                    // populate 
+                    NameObserverInput.Text = selectedObserver.FirstName;
+                    FamilyNameObserverInput.Text = selectedObserver.LastName;
+                }
+                else
+                {
+                    EditObserverBox.Visibility = Visibility.Visible;
+                    NameObserverInput.Text = selectedObserver.FirstName;
+                    FamilyNameObserverInput.Text = selectedObserver.LastName;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
+            }
+        }
+
+        private void NewObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddObservationBox.Visibility = Visibility.Visible;
+        }
+
+        private void EditObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditObservationBox.Visibility = Visibility.Visible;
+        }
+
+        private void DeleteObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+      
+        private void CancelNewObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddObserverBox.Visibility = Visibility.Hidden;
+        }
+
+        private void SubmitObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+
+        private void CancelObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditObservationBox.Visibility = Visibility.Hidden;
+        }
+
+        private void AddMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddMeasurementBox.Visibility = Visibility.Visible;
+            //TODO populate listOfNewMeasurements
+        }
+
+        private void EditMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditMeasurementBox.Visibility = Visibility.Visible;
+        }
+
+        private void DeleteMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+
+        private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO commit mätpunktslista efter skapad observation med id.
+        }
+
+        private void CancelNewObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            listOfNewMeasurements = null;
+            AddObservationBox.Visibility = Visibility.Hidden;
+        }
+
+        private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+
+        private void CancelEditMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditMeasurementBox.Visibility = Visibility.Hidden;
+        }
+
+        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO add measurement to listOfNewMeasurements
+        }
+
+        private void CancelNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddMeasurementBox.Visibility = Visibility.Hidden;
+            listOfNewMeasurements = null;
+        }
+
+        private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO commit to db
+        }
+
+        private void CancelEditObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditObserverBox.Visibility = Visibility.Hidden;
+            // we dont't clear the fields, because they get populated every time anyways
+        }
+
+        //private void AddNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    AddMeasurementBox.Visibility = Visibility.Visible;
+        //}
+
+        //private void EditNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    EditMeasurementBox.Visibility = Visibility.Visible;
+        //}
     }
 }
