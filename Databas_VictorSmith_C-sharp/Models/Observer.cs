@@ -43,5 +43,25 @@ namespace Databas_VictorSmith_C_sharp.Models
     {
         public int Id { get; set; }
         public string Country_Name { get; set; }
-    }    
+    }
+    public class Measurement
+    {
+        public int Id { get; set; }
+        public int Category_Id { get; set; }
+        public int Observation_Id { get; set; }
+        public string Value { get; set; }
+    }
+    public class Category
+    {
+        public int Id { get; set; }
+        public int Basecategory_Id { get; set; }
+        public int Unit_Id { get; set; }
+        public string Category_Name { get; set; }
+    }
+    public class Unit
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Abbreviation { get; set; }
+    }
 }
