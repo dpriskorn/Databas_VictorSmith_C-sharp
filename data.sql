@@ -23,7 +23,7 @@ COPY public.country (id, name) FROM stdin;
 -- Data for Name: observer; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.observer (id, firstname, lastname) FROM stdin;
+COPY public.observer (firstname, lastname) FROM stdin;
 1	Erik	Öberg
 3	Johnny	Abrahamsson
 4	Ove	Ahmed
