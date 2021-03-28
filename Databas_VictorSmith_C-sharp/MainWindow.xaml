@@ -122,20 +122,20 @@
             <StackPanel Orientation = "Vertical">
                 <Label Content="Område:" FontSize="12" />
                 <!--börjar tom-->
-                <ListBox x:Name="newAreas" Height="50" MaxHeight="75"></ListBox>
+                <ListBox x:Name="Areas" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Välj område genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Mätpunkter:" FontSize="12" />
                 <!--börjar tom-->
                 <ListBox x:Name="newMeasurements" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
-                <Label Content="GPS punkt:" FontSize="12" />
-                <ListBox x:Name="Geolocations" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera GPS-koordinaten som hör till observationen." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="AddNewMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementButton_Click" />
                     <Button x:Name="EditNewMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementButton_Click"/>
                     <Button x:Name="DeleteNewMeasurementButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementButton_Click"/>
                 </StackPanel>
+                <Label Content="GPS punkt:" FontSize="12" />
+                <ListBox x:Name="Geolocations" Height="50" MaxHeight="75"></ListBox>
+                <TextBlock Text = "Markera GPS-koordinaten som hör till observationen." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="SubmitNewObservationButton" Content="Spara" FontSize="12" Margin="10" Width="50" Click="SubmitNewObservationButton_Click"/>
                     <!-- detta raderar ev. nya mätpunkter som gjorts ovan-->

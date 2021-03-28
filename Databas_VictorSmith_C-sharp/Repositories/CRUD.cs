@@ -46,38 +46,38 @@ namespace Databas_VictorSmith_C_sharp.Repositories
             }
         }
 
-        public static void AddArea(string areaName, int country_id)
-        {
-            string stmt = "INSERT INTO area (name, country_id) VALUES (@areaName, @countryInput)";
-            using (var conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
-                {
-                    command.Parameters.Add(new NpgsqlParameter("areaName", areaName));
-                    command.Parameters.Add(new NpgsqlParameter("countryInput", country_id));
-                    command.ExecuteNonQuery();
-                }
-                conn.Close();
-            }
-        }
+        //public static void AddArea(string areaName, int country_id)
+        //{
+        //    string stmt = "INSERT INTO area (name, country_id) VALUES (@areaName, @countryInput)";
+        //    using (var conn = new NpgsqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        using (var command = new NpgsqlCommand(stmt, conn))
+        //        {
+        //            command.Parameters.Add(new NpgsqlParameter("areaName", areaName));
+        //            command.Parameters.Add(new NpgsqlParameter("countryInput", country_id));
+        //            command.ExecuteNonQuery();
+        //        }
+        //        conn.Close();
+        //    }
+        //}
 
-        public static void AddGeolocation(double latitude, double longitude, int area_id)
-        {
-            string stmt = "INSERT INTO geolocation (latitude, longitude, area_id) VALUES (@longitudeInput, @latitudeInput, @areaInput)";
-            using (var conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
-                {
-                    command.Parameters.Add(new NpgsqlParameter("latitudeInput", latitude));
-                    command.Parameters.Add(new NpgsqlParameter("longitudeInput", longitude));
-                    command.Parameters.Add(new NpgsqlParameter("areaInput", area_id));
-                    command.ExecuteNonQuery();
-                }
-                conn.Close();
-            }
-        }
+        //public static void AddGeolocation(double latitude, double longitude, int area_id)
+        //{
+        //    string stmt = "INSERT INTO geolocation (latitude, longitude, area_id) VALUES (@longitudeInput, @latitudeInput, @areaInput)";
+        //    using (var conn = new NpgsqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        using (var command = new NpgsqlCommand(stmt, conn))
+        //        {
+        //            command.Parameters.Add(new NpgsqlParameter("latitudeInput", latitude));
+        //            command.Parameters.Add(new NpgsqlParameter("longitudeInput", longitude));
+        //            command.Parameters.Add(new NpgsqlParameter("areaInput", area_id));
+        //            command.ExecuteNonQuery();
+        //        }
+        //        conn.Close();
+        //    }
+        //}
 
         public static void AddObservation(Observer obs, int geolocation_id)
         {
@@ -309,7 +309,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         }
         public static List<Geolocation> GetGeolocationList()
         {
-            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateGeolocationList");
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetGeolocationList");
             // We don't care about area id because we don't support editing or adding geolocations anyway.
             string stmt = "SELECT geolocation.id, latitude, longitude, area.name as area_name " +
                 "FROM geolocation " +
@@ -341,6 +341,41 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 }
                 conn.Close();
                 return geolocations;
+            }
+        }
+        public static List<Area> GetAreaList()
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetAreaList");
+            // We don't care about area id because we don't support editing or adding Areas anyway.
+            string stmt = "SELECT area.id, area.name as area_name, country.name as country_name " +
+                "FROM area " +
+                "JOIN country " +
+                "ON country_id = country.id " +
+                "ORDER BY area.id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Area instance;
+                List<Area> areas = new List<Area>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    //command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            instance = new Area()
+                            {
+                                Id = (int)reader["id"],
+                                Area_Name = (string)reader["area_name"],
+                                Country_Name = (string)reader["country_name"],
+                            };
+                            areas.Add(instance);
+                        };
+                    }
+                }
+                conn.Close();
+                return areas;
             }
         }
         #endregion

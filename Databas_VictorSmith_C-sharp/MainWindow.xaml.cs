@@ -61,6 +61,13 @@ namespace Databas_VictorSmith_C_sharp
             List<Geolocation> listOfGeolocations = CRUD.GetGeolocationList();
             UpdateGeolocationsListbox(listOfGeolocations);
         }
+        
+        public void FetchAreas()
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
+            List<Area> listOfAreas = CRUD.GetAreaList();
+            UpdateAreasListbox(listOfAreas);
+        }
         #endregion
         #region UIMETHODS
         public void UpdateObserversListbox(List<Observer> list)
@@ -85,6 +92,14 @@ namespace Databas_VictorSmith_C_sharp
             editGeolocations.ItemsSource = list;
             Geolocations.ItemsSource = null;
             Geolocations.ItemsSource = list;
+        }
+        public void UpdateAreasListbox(List<Area> list)
+        {
+            // We update both at the same time
+            editAreas.ItemsSource = null;
+            editAreas.ItemsSource = list;
+            Areas.ItemsSource = null;
+            Areas.ItemsSource = list;
         }
         #endregion
         public MainWindow()
@@ -133,6 +148,7 @@ namespace Databas_VictorSmith_C_sharp
         private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
         {
             //TODO commit mätpunktslista efter skapad observation med id.
+            //TODO hämta markerad GPSpunkt
         }
         private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
@@ -203,6 +219,7 @@ namespace Databas_VictorSmith_C_sharp
                     AddObservationBox.Visibility = Visibility.Visible;
                 }
                 FetchGeolocations();
+                FetchAreas();
             }
             else
             {
@@ -264,6 +281,7 @@ namespace Databas_VictorSmith_C_sharp
                 }
                 FetchMeasurements(selectedObservation);
                 FetchGeolocations();
+                FetchAreas();
             }
             else
             {
