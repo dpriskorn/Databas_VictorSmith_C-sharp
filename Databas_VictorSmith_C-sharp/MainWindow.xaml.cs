@@ -344,6 +344,7 @@ namespace Databas_VictorSmith_C_sharp
                 MessageBox.Show($"Observation tillagd.");
                 FetchObservations(selectedObserver);
                 AddObservationBox.Visibility = Visibility.Hidden;
+                observationBeingAdded = false;
             }
             else if (Geolocations.SelectedItem == null)
             {
@@ -424,7 +425,7 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO add to listOfNewMeasurements
+            ////
             if (Categories.SelectedItem != null && newValueInput.Text != "")
             {
                 Category category = (Category)Categories.SelectedItem;
