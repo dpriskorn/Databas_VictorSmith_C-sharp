@@ -472,6 +472,40 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return categories;
             }
         }
+        public static List<Unit> GetUnitList()
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetUnitList");
+            // We don't care about units id because we don't support editing or adding Units anyway.
+            string stmt = "SELECT type, abbreviation " +
+                "FROM unit " +
+                "ORDER BY id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Unit instance;
+                List<Unit> units = new List<Unit>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    //command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            instance = new Unit()
+                            {
+                                //Id = (int)reader["id"],
+                                Type = (string)reader["type"],
+                                Abbreviation = (string)reader["abbreviation"],
+                                //Country_Name = (string)reader["country_name"],
+                            };
+                            units.Add(instance);
+                        };
+                    }
+                }
+                conn.Close();
+                return units;
+            }
+        }
         #endregion
 
         #region UPDATE

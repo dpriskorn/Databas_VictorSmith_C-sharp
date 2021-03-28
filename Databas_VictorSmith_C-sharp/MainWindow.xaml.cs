@@ -72,8 +72,14 @@ namespace Databas_VictorSmith_C_sharp
         public void FetchCategories()
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Area> listOfCategories = CRUD.GetAreaList();
+            List<Category> listOfCategories = CRUD.GetCategoryList();
             UpdateCategoriesListbox(listOfCategories);
+        }
+        public void FetchUnits()
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
+            List<Unit> listOfUnits = CRUD.GetUnitList();
+            UpdateUnitsListbox(listOfUnits);
         }
         #endregion
         #region UIMETHODS
@@ -108,13 +114,20 @@ namespace Databas_VictorSmith_C_sharp
             Areas.ItemsSource = null;
             Areas.ItemsSource = list;
         }
-        public void UpdateCategoriesListbox(List<Area> list)
+        public void UpdateCategoriesListbox(List<Category> list)
         {
             // We update both at the same time
             editCategories.ItemsSource = null;
             editCategories.ItemsSource = list;
             Categories.ItemsSource = null;
             Categories.ItemsSource = list;
+        }
+        public void UpdateUnitsListbox(List<Unit> list)
+        {
+            editUnits.ItemsSource = null;
+            editUnits.ItemsSource = list;
+            Units.ItemsSource = null;
+            Units.ItemsSource = list;
         }
         #endregion
         public MainWindow()
@@ -254,6 +267,7 @@ namespace Databas_VictorSmith_C_sharp
                 AddMeasurementBox.Visibility = Visibility.Visible;
             }
             FetchCategories();
+            FetchUnits();
         }
         #endregion
 
@@ -321,6 +335,7 @@ namespace Databas_VictorSmith_C_sharp
                 EditMeasurementBox.Visibility = Visibility.Visible;
             }
             FetchCategories();
+            FetchUnits();
         }
         #endregion
 

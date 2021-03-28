@@ -106,7 +106,7 @@
                 <Label Content="Nuvarande GPS punkt:" FontSize="12" />
                 <Label x:Name="currentGeolocation" Content="" FontSize="12" />
                 <ListBox x:Name="editGeolocations" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera ett annat GPS-punkt ovan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
+                <TextBlock Text = "Ändra GPS-punkt genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="AddMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementButton_Click"/>
                     <Button x:Name="EditMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementButton_Click"/>
@@ -151,7 +151,7 @@
                 <Label Content="Värde:" FontSize="12" />
                 <TextBox x:Name="ValueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 <Label Content="Enhet:" FontSize="12" />
-                <ListBox x:Name="EditUnits" Height="50" MaxHeight="75"></ListBox>
+                <ListBox x:Name="editUnits" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="SubmitEditMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50" Click="SubmitEditMeasurementButton_Click"/>
@@ -168,7 +168,7 @@
                 <Label Content="Värde:" FontSize="12" />
                 <TextBox x:Name="NewValueInput" Text="" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 <Label Content="Enhet:" FontSize="12" />
-                <ListBox x:Name="NewUnit" Height="50" MaxHeight="75"></ListBox>
+                <ListBox x:Name="Units" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Välj enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="SubmitNewMeasurementButton" Content="Lägg till" FontSize="12" Margin="10" Width="50" Click="SubmitNewMeasurementButton_Click"/>
