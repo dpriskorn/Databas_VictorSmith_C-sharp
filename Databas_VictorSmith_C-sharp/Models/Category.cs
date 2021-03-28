@@ -8,11 +8,12 @@ namespace Databas_VictorSmith_C_sharp.Models
     {
         public int Id { get; set; }
         //public int Basecategory_Id { get; set; }
-        //public int Unit_Id { get; set; }
+        public int Unit_Id { get; set; }
+        public string Unit_Abbreviation { get; set; }
         public string Category_Name { get; set; }
         public override string ToString()
         {
-            return string.Format("{0}", Category_Name);
+            return string.Format("{0} ({1})", Category_Name, Unit_Abbreviation);
         }
     }
 }

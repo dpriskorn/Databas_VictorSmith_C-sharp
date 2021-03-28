@@ -28,10 +28,13 @@ namespace Databas_VictorSmith_C_sharp
         #region INITIALIZATION
         public Observer selectedObserver = null;
         public Observation selectedObservation = null;
-        List<Observer> listOfObservers = null;
-        List<Measurement> listOfNewMeasurements = null;
-        List<Measurement> listOfMeasurements = null;
-        List<Geolocation> listOfGeolocations = null;
+        public List<Observer> listOfObservers = null;
+        public List<Measurement> listOfNewMeasurements = new List<Measurement>();
+        public List<Measurement> listOfMeasurements = null;
+        public List<Geolocation> listOfGeolocations = null;
+        public List<Area> listOfAreas = null;
+        public List<Category> listOfCategories = null;
+        public List<Unit> listOfUnits = null;
         //System.Diagnostics.Trace.WriteLine($"MainWindow:INITIALIZATION");
         readonly List<Observer> initialListOfObservers = CRUD.GetObserverList();
         #endregion
@@ -58,28 +61,28 @@ namespace Databas_VictorSmith_C_sharp
         }
         public void FetchGeolocations()
         {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchGeolocations");
             List<Geolocation> listOfGeolocations = CRUD.GetGeolocationList();
             UpdateGeolocationsListbox(listOfGeolocations);
         }
         
         public void FetchAreas()
         {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Area> listOfAreas = CRUD.GetAreaList();
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchAreas");
+            listOfAreas = CRUD.GetAreaList();
             UpdateAreasListbox(listOfAreas);
         }
         public void FetchCategories()
         {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Category> listOfCategories = CRUD.GetCategoryList();
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchCategories");
+            listOfCategories = CRUD.GetCategoryList();
             UpdateCategoriesListbox(listOfCategories);
         }
         public void FetchUnits()
         {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Unit> listOfUnits = CRUD.GetUnitList();
-            UpdateUnitsListbox(listOfUnits);
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchUnits");
+            listOfUnits = CRUD.GetUnitList();
+            //UpdateUnitsListbox(listOfUnits);
         }
         #endregion
         #region UIMETHODS
@@ -122,13 +125,13 @@ namespace Databas_VictorSmith_C_sharp
             Categories.ItemsSource = null;
             Categories.ItemsSource = list;
         }
-        public void UpdateUnitsListbox(List<Unit> list)
-        {
-            editUnits.ItemsSource = null;
-            editUnits.ItemsSource = list;
-            Units.ItemsSource = null;
-            Units.ItemsSource = list;
-        }
+        //public void UpdateUnitsListbox(List<Unit> list)
+        //{
+        //    editUnits.ItemsSource = null;
+        //    editUnits.ItemsSource = list;
+        //    Units.ItemsSource = null;
+        //    Units.ItemsSource = list;
+        //}
         #endregion
         public MainWindow()
         {
@@ -184,7 +187,36 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click");
             //TODO add measurement to listOfNewMeasurements
+            if (Categories.SelectedItem != null && NewValueInput.Text != "")
+            {
+                Category category = (Category)Categories.SelectedItem;
+                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                double value = Convert.ToDouble(NewValueInput.Text);
+                Measurement measurement = new Measurement()
+                {
+                    Category_Id = category.Id,
+                    // We don't know the value because the observation has not been submitted yet
+                    Observation_Id = 0,
+                    Value = value,
+                    Unit_Abbreviation = category.Unit_Abbreviation,
+                    Category_Name = category.Category_Name
+                };
+                listOfNewMeasurements.Add(measurement);
+                MessageBox.Show($"Mätpunkt tillagd.");
+                newMeasurements.ItemsSource = null;
+                newMeasurements.ItemsSource = listOfNewMeasurements;
+                AddMeasurementBox.Visibility = Visibility.Hidden;
+            }
+            else if (Categories.SelectedItem == null)
+            {
+                MessageBox.Show($"Kategori saknas.");
+            }
+            else if (NewValueInput.Text == "")
+            {
+                MessageBox.Show($"Mätvärde saknas.");
+            }
         }
         private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
         {
@@ -353,6 +385,7 @@ namespace Databas_VictorSmith_C_sharp
 
         private void CancelNewObservationButton_Click(object sender, RoutedEventArgs e)
         {
+            newMeasurements.ItemsSource = null;
             listOfNewMeasurements = null;
             AddObservationBox.Visibility = Visibility.Hidden;
         }

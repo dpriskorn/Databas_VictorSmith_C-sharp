@@ -7,10 +7,10 @@ namespace Databas_VictorSmith_C_sharp.Models
     public class Measurement
     {
         public int Id { get; set; }
-        //public int Category_Id { get; set; }
+        public int Category_Id { get; set; }
         public string Category_Name { get; set; }
         public string Unit_Abbreviation { get; set; }
-        //public int Observation_Id { get; set; }
+        public int Observation_Id { get; set; }
         public double Value { get; set; }
         public override string ToString()
         {

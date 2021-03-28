@@ -443,8 +443,11 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         {
             System.Diagnostics.Trace.WriteLine($"CRUD:GetCategoryList");
             // We don't care about categories id because we don't support editing or adding Categorys anyway.
-            string stmt = "SELECT id, name " +
+            string stmt = "SELECT category.id, name, unit_id, unit.abbreviation as unit_abbreviation " +
                 "FROM category " +
+                "JOIN unit " +
+                "ON unit_id = unit.id " +
+                "WHERE unit_id IS NOT NULL " +
                 "ORDER BY id";
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -462,7 +465,8 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                             {
                                 Id = (int)reader["id"],
                                 Category_Name = (string)reader["name"],
-                                //Country_Name = (string)reader["country_name"],
+                                Unit_Id = (int)reader["unit_id"],
+                                Unit_Abbreviation = (string)reader["unit_abbreviation"],
                             };
                             categories.Add(instance);
                         };
