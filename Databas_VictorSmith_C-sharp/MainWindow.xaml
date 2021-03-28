@@ -110,7 +110,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="AddMeasurementToExistingButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementToExistingButton_Click"/>
                     <Button x:Name="EditMeasurementFromExistingButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementFromExistingButton_Click"/>
-                    <Button x:Name="DeleteMeasurementFromExistingButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementFromExistingButton_Clic"/>
+                    <Button x:Name="DeleteMeasurementFromExistingButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementFromExistingButton_Click"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="SubmitEditObservationButton" Content="Spara ändringar" FontSize="12" Margin="10" Width="130" Click="SubmitEditObservationButton_Click"/>
@@ -141,30 +141,29 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Redigera mätpunkt" Grid.Column="3" Grid.Row="2" x:Name="EditMeasurementBox" Visibility="Hidden">
+        <GroupBox Header="Redigera nytt mätpunkt" Grid.Column="3" Grid.Row="2" x:Name="EditNewMeasurementBox" Visibility="Hidden">
             <StackPanel Orientation = "Vertical">
                 <Label Content="Kategori:" FontSize="12" />
-                <ListBox x:Name="editCategories" Height="50" MaxHeight="75"></ListBox>
+                <ListBox x:Name="editNewCategories" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra kategori genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Värde:" FontSize="12" />
-                <TextBox x:Name="ValueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                <TextBox x:Name="editedValueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 <!--<Label Content="Enhet:" FontSize="12" />
                 <ListBox x:Name="editUnits" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>-->
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="SubmitEditMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50" Click="SubmitEditMeasurementButton_Click"/>
-                    <Button x:Name="CancelEditMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50" Click="CancelEditMeasurementButton_Click"/>
+                    <Button x:Name="SubmitEditNewMeasurementButton" Content="Spara" FontSize="12" Margin="10" Width="50" />
+                    <Button x:Name="CancelEditNewMeasurementButton" Content="Avbryt" FontSize="12" Margin="10" Width="50" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Lägg till mätpunkt" Grid.Column="3" Grid.Row="2" x:Name="AddMeasurementBox" Visibility="Hidden">
             <StackPanel Orientation = "Vertical">
                 <Label Content="Kategori:" FontSize="12" />
-                <!--börjar tom-->
-                <ListBox x:Name="Categories" Height="50" MaxHeight="75"></ListBox>
+                <ListBox x:Name="newCategories" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Välj kategori genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Värde:" FontSize="12" />
-                <TextBox x:Name="NewValueInput" Text="" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                <TextBox x:Name="newValueInput" Text="" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 <!--<Label Content="Enhet:" FontSize="12" />
                 <ListBox x:Name="Units" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Välj enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>-->

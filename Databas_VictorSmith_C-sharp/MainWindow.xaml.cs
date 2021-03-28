@@ -22,6 +22,24 @@ namespace Databas_VictorSmith_C_sharp
     /// Measurements added will be held in a list until submitted.
     /// Measurements edited on existing added to an internal list until submitted.
     /// Measurements deleted will be deleted from an internal list and added to a deletionlist until submitted.
+    /// When editing an observation the measurement-logic access observationBeingEdited to determine how to handle the data
+    /// If editing existing observation:
+    /// - add to listOfMeasurements and listOfNewMeasurements and update the listbox
+    /// - edit (remove and add edited) from listOfMeasurements and add to listOfUpdatedMeasurements and update the listbox
+    /// - delete from listOfMeasurements add to listOfDeletedMeasurements and update the listbox
+    /// When submitting 
+    /// - add using listOfNewMeasurements
+    /// - update using listOfUpdatedMeasurements
+    /// - delete using listOfDeletedMeasurements
+    /// - clear the lists in the end
+    /// If new observation:
+    /// - add, edit (remove and add the new version) or delete from listOfNewMeasurements and update the listbox
+    /// When submitting 
+    /// - add using listOfNewMeasurements
+    /// 
+    /// The listboxes are:
+    /// New Observation: newMeasurements
+    /// Existing Observation: observationMeasurements
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -35,10 +53,11 @@ namespace Databas_VictorSmith_C_sharp
         public List<Observer> listOfObservers = null;
         public List<Observation> listOfObservations = null;
         public List<Measurement> listOfNewMeasurements = new List<Measurement>();
-        public List<Measurement> listOfMeasurements = null;
+        public List<Measurement> listOfMeasurements = null; // used for the user-facing listbox
         public List<Measurement> listOfDeletedMeasurements = null;
+        public List<Measurement> listOfUpdatedMeasurements = null;
         public List<Geolocation> listOfGeolocations = null;
-        public List<Area> listOfAreas = null;
+        //public List<Area> listOfAreas = null;
         public List<Category> listOfCategories = null;
         public List<Unit> listOfUnits = null;
         //System.Diagnostics.Trace.WriteLine($"MainWindow:INITIALIZATION");
@@ -199,7 +218,7 @@ namespace Databas_VictorSmith_C_sharp
             if (measurementBeingEdited == false)
             {
                 measurementBeingAdded = true;
-                AddMeasurementBox.Visibility = Visibility.Visible;
+                AddToExistingMeasurementBox.Visibility = Visibility.Visible;
                 FetchCategories();
                 FetchUnits();
             }
@@ -210,11 +229,11 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void AddNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            AddMeasurementBox.Visibility = Visibility.Visible;
+            AddNewMeasurementBox.Visibility = Visibility.Visible;
         }
         private void EditNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            EditMeasurementBox.Visibility = Visibility.Visible;
+            EditNewMeasurementBox.Visibility = Visibility.Visible;
         }
         #endregion
 
@@ -278,7 +297,7 @@ namespace Databas_VictorSmith_C_sharp
             if (measurementBeingAdded == false)
             {
                 measurementBeingEdited = true;
-                EditMeasurementBox.Visibility = Visibility.Visible;
+                EditNewMeasurementBox.Visibility = Visibility.Visible;
                 FetchCategories();
                 FetchUnits();
             }
@@ -361,7 +380,7 @@ namespace Databas_VictorSmith_C_sharp
                 MessageBox.Show($"Mätpunkt tillagd.");
                 newMeasurements.ItemsSource = null;
                 newMeasurements.ItemsSource = listOfNewMeasurements;
-                AddMeasurementBox.Visibility = Visibility.Hidden;
+                AddNewMeasurementBox.Visibility = Visibility.Hidden;
             }
             else if (Categories.SelectedItem == null)
             {
@@ -419,7 +438,6 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void DeleteMeasurementFromExistingButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO add to listOfDeletedMeasurements remove from listOfMeasurements
             if (listOfMeasurements != null && listOfMeasurements.Count > 0 && observationMeasurements.SelectedItem != null)
             {
                 Measurement measurement = (Measurement)observationMeasurements.SelectedItem;
@@ -453,13 +471,13 @@ namespace Databas_VictorSmith_C_sharp
 
         private void CancelEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            EditMeasurementBox.Visibility = Visibility.Hidden;
+            EditNewMeasurementBox.Visibility = Visibility.Hidden;
             measurementBeingEdited = false;
         }
 
         private void CancelNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            AddMeasurementBox.Visibility = Visibility.Hidden;
+            AddNewMeasurementBox.Visibility = Visibility.Hidden;
             listOfNewMeasurements = null;
             measurementBeingAdded = false;
         }
