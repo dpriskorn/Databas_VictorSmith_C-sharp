@@ -307,6 +307,41 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return measurements;
             }
         }
+        public static List<Geolocation> GetGeolocationList()
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateGeolocationList");
+            // We don't care about area id because we don't support editing or adding geolocations anyway.
+            string stmt = "SELECT id, latitude, longitude, area.name as area_name FROM geolocation" +
+                "JOIN area " +
+                "ON area_id = area.id" +
+                "WHERE observation_id = @observationId ORDER BY id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Geolocation instance;
+                List<Geolocation> geolocations = new List<Geolocation>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    //command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            instance = new Geolocation()
+                            {
+                                Id = (int)reader["id"],
+                                Area_Name = (string)reader["area_name"],
+                                Latitude = (double)reader["latitude"],
+                                Longitude = (double)reader["longitude"],
+                            };
+                            geolocations.Add(instance);
+                        };
+                    }
+                }
+                conn.Close();
+                return geolocations;
+            }
+        }
         #endregion
 
         #region UPDATE
