@@ -94,7 +94,7 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 }
                 conn.Close();
             }
-            MessageBox.Show(res.ToString());
+            //MessageBox.Show(res.ToString());
             return res;
         }
 
@@ -548,6 +548,36 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 conn.Close();
             }
             return MessageBox.Show("Observatören är nu borttagen.").ToString();
+        }
+        public static string DeleteObservation(Observation obs)
+        {
+            string stmt = "DELETE FROM observation WHERE id=" + obs.Id;
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+
+                {
+                    using var reader = command.ExecuteReader();
+                }
+                conn.Close();
+            }
+            return MessageBox.Show("Observationen är nu borttagen.").ToString();
+        }
+        public static string DeleteMeasurement(Measurement m)
+        {
+            string stmt = "DELETE FROM measurement WHERE id=" + m.Id;
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+
+                {
+                    using var reader = command.ExecuteReader();
+                }
+                conn.Close();
+            }
+            return MessageBox.Show("Mätpunkten är nu borttagen.").ToString();
         }
         #endregion
     }
