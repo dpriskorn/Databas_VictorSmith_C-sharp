@@ -96,10 +96,10 @@
         </GroupBox>
         <GroupBox Header="Redigera klimatobservation" Grid.Column="2" Grid.Row="2" x:Name="EditObservationBox" Visibility="Hidden">
             <StackPanel Orientation = "Vertical">
-                <Label Content="Område:" FontSize="12" />
+                <!--<Label Content="Område:" FontSize="12" />
                 <Label x:Name="currentArea" Content="" FontSize="12" />
                 <ListBox x:Name="editAreas" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera ett annat område ovan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
+                <TextBlock Text = "Markera ett annat område ovan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>-->
                 <Label Content="Mätpunkter i denna observation:" FontSize="12" />
                 <ListBox x:Name="observationMeasurements" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="250" TextWrapping="Wrap" Margin="5"/>
@@ -120,12 +120,10 @@
         </GroupBox>
         <GroupBox Header="Lägg till klimatobservation" Grid.Column="2" Grid.Row="2" x:Name="AddObservationBox" Visibility="Hidden">
             <StackPanel Orientation = "Vertical">
-                <Label Content="Område:" FontSize="12" />
-                <!--börjar tom-->
+                <!--<Label Content="Område:" FontSize="12" />
                 <ListBox x:Name="Areas" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Välj område genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
+                <TextBlock Text = "Välj område genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>-->
                 <Label Content="Mätpunkter:" FontSize="12" />
-                <!--börjar tom-->
                 <ListBox x:Name="newMeasurements" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">

@@ -79,31 +79,37 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         //    }
         //}
 
-        public static void AddObservation(Observer obs, int geolocation_id)
+        public static int AddObservation(Observer obs, int geolocation_id)
         {
-                string stmt = "INSERT INTO observation (observer_id, geolocation_id) VALUES (@observerIdInput, @geolocationIdInput)";
-                using (var conn = new NpgsqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (var command = new NpgsqlCommand(stmt, conn))
-                    {
-                        command.Parameters.Add(new NpgsqlParameter("observerIdInput", obs.Id));
-                        command.Parameters.Add(new NpgsqlParameter("geolocationIdInput", geolocation_id));
-                        command.ExecuteNonQuery();
-                    }
-                    conn.Close();
-                }
-            }
-
-        public static void AddMeasurement()
-        {
-            //TODO
-            string stmt = "INSERT INTO x VALUES y";
+            string stmt = "INSERT INTO observation (observer_id, geolocation_id) VALUES (@observerIdInput, @geolocationIdInput) RETURNING id";
+            int res;
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
                 using (var command = new NpgsqlCommand(stmt, conn))
                 {
+                    command.Parameters.Add(new NpgsqlParameter("observerIdInput", obs.Id));
+                    command.Parameters.Add(new NpgsqlParameter("geolocationIdInput", geolocation_id));
+                    res = (int) command.ExecuteScalar();
+                }
+                conn.Close();
+            }
+            MessageBox.Show(res.ToString());
+            return res;
+        }
+
+        public static void AddMeasurement(Measurement m, int observationId)
+        {
+            //TODO
+            string stmt = "INSERT INTO measurement (value, observation_id, category_id) VALUES (@valueInput, @observationIdInput, @categoryIdInput)";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    command.Parameters.Add(new NpgsqlParameter("valueInput", m.Value));
+                    command.Parameters.Add(new NpgsqlParameter("observationIdInput", observationId));
+                    command.Parameters.Add(new NpgsqlParameter("categoryIdInput", m.Category_Id));
                     command.ExecuteNonQuery();
                 }
                 conn.Close();

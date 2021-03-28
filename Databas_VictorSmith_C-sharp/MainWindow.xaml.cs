@@ -70,7 +70,7 @@ namespace Databas_VictorSmith_C_sharp
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchAreas");
             listOfAreas = CRUD.GetAreaList();
-            UpdateAreasListbox(listOfAreas);
+            //UpdateAreasListbox(listOfAreas);
         }
         public void FetchCategories()
         {
@@ -109,14 +109,14 @@ namespace Databas_VictorSmith_C_sharp
             Geolocations.ItemsSource = null;
             Geolocations.ItemsSource = list;
         }
-        public void UpdateAreasListbox(List<Area> list)
-        {
-            // We update both at the same time
-            editAreas.ItemsSource = null;
-            editAreas.ItemsSource = list;
-            Areas.ItemsSource = null;
-            Areas.ItemsSource = list;
-        }
+        //public void UpdateAreasListbox(List<Area> list)
+        //{
+        //    // We update both at the same time
+        //    editAreas.ItemsSource = null;
+        //    editAreas.ItemsSource = list;
+        //    Areas.ItemsSource = null;
+        //    Areas.ItemsSource = list;
+        //}
         public void UpdateCategoriesListbox(List<Category> list)
         {
             // We update both at the same time
@@ -178,8 +178,26 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO commit mätpunktslista efter skapad observation med id.
-            //TODO hämta markerad GPSpunkt
+            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewObservationButton_Click");
+            if (Geolocations.SelectedItem != null && listOfNewMeasurements.Count > 0 && selectedObserver != null)
+            {
+                Geolocation geolocation = (Geolocation)Geolocations.SelectedItem;
+                int observationId = CRUD.AddObservation(selectedObserver, geolocation.Id);
+                foreach (Measurement measurement in listOfNewMeasurements) {
+                    CRUD.AddMeasurement(measurement, observationId);
+                }
+                MessageBox.Show($"Observation tillagd.");
+                FetchObservations(selectedObserver);
+                AddObservationBox.Visibility = Visibility.Hidden;
+            }
+            else if (Geolocations.SelectedItem == null)
+            {
+                MessageBox.Show($"GPS-punkt saknas.");
+            }
+            else if (listOfNewMeasurements.Count == 0)
+            {
+                MessageBox.Show($"Minst ett mätpunkt behövs.");
+            }
         }
         private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
@@ -188,11 +206,10 @@ namespace Databas_VictorSmith_C_sharp
         private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click");
-            //TODO add measurement to listOfNewMeasurements
             if (Categories.SelectedItem != null && NewValueInput.Text != "")
             {
                 Category category = (Category)Categories.SelectedItem;
-                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                //System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
                 double value = Convert.ToDouble(NewValueInput.Text);
                 Measurement measurement = new Measurement()
                 {
@@ -203,6 +220,10 @@ namespace Databas_VictorSmith_C_sharp
                     Unit_Abbreviation = category.Unit_Abbreviation,
                     Category_Name = category.Category_Name
                 };
+                if (listOfNewMeasurements == null)
+                {
+                    List<Measurement> listOfNewMeasurements = new List<Measurement>();
+                }
                 listOfNewMeasurements.Add(measurement);
                 MessageBox.Show($"Mätpunkt tillagd.");
                 newMeasurements.ItemsSource = null;
