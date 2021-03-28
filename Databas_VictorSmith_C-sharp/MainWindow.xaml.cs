@@ -425,14 +425,35 @@ namespace Databas_VictorSmith_C_sharp
             /// - update using listOfUpdatedMeasurements
             /// - delete using listOfDeletedMeasurements
             /// - clear the lists in the end
+            /// - update listbox
             
-            if (listOfNewMeasurements.Count > 0)
+            if (listOfNewMeasurements != null && listOfNewMeasurements.Count > 0)
             {
                 foreach (Measurement measurement in listOfNewMeasurements)
                 {
-                    CRUD.AddMeasurement(measurement, observationId);
+                    CRUD.AddMeasurement(measurement, observationBeingEdited.Id);
                 }
             }
+            if (listOfDeletedMeasurements != null && listOfDeletedMeasurements.Count > 0)
+            {
+                foreach (Measurement measurement in listOfDeletedMeasurements)
+                {
+                    CRUD.DeleteMeasurement(measurement);
+                }
+            }
+            if (listOfUpdatedMeasurements != null && listOfUpdatedMeasurements.Count > 0)
+            {
+                foreach (Measurement measurement in listOfUpdatedMeasurements)
+                {
+                    CRUD.UpdateMeasurement(measurement);
+                }
+            }
+            listOfNewMeasurements = null;
+            listOfDeletedMeasurements = null;
+            listOfUpdatedMeasurements = null;
+            MessageBox.Show($"Observationen blev uppdaterad.");
+            EditObservationBox.Visibility = Visibility.Hidden;
+            FetchObservations(selectedObserver);
         }
         private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {

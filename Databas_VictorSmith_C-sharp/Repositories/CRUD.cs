@@ -519,7 +519,24 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         #endregion
 
         #region UPDATE
-
+        public static void UpdateMeasurement(Measurement measurement)
+        {
+            string stmt = "UPDATE measurement " +
+                "SET value = @value, category_id = @categoryId " +
+                "WHERE id=" + measurement.Id;
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    command.Parameters.Add(new NpgsqlParameter("value", measurement.Value));
+                    command.Parameters.Add(new NpgsqlParameter("categoryId", measurement.Category_Id));
+                    using var reader = command.ExecuteReader();
+                }
+                conn.Close();
+            }
+            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateMeasurement:Update complete of {measurement.Id}");
+        }
         #endregion
 
         #region DELETE
