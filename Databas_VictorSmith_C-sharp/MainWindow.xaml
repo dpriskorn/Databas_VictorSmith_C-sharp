@@ -108,13 +108,13 @@
                 <ListBox x:Name="editGeolocations" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra GPS-punkt genom att markera i listan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="AddMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementButton_Click"/>
-                    <Button x:Name="EditMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementButton_Click"/>
-                    <Button x:Name="DeleteMeasurementButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementButton_Click"/>
+                    <Button x:Name="AddMeasurementToExistingButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementToExistingButton_Click"/>
+                    <Button x:Name="EditMeasurementFromExistingButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementFromExistingButton_Click"/>
+                    <Button x:Name="DeleteMeasurementFromExistingButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementFromExistingButton_Clic"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="SubmitObservationButton" Content="Spara ändringar" FontSize="12" Margin="10" Width="130" Click="SubmitObservationButton_Click"/>
-                    <Button x:Name="CancelObservationButton" Content="Avbryt" FontSize="12" Margin="10" Width="50" Click="CancelObservationButton_Click"/>
+                    <Button x:Name="SubmitEditObservationButton" Content="Spara ändringar" FontSize="12" Margin="10" Width="130" Click="SubmitEditObservationButton_Click"/>
+                    <Button x:Name="CancelEditObservationButton" Content="Avbryt" FontSize="12" Margin="10" Width="50" Click="CancelEditObservationButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -127,9 +127,9 @@
                 <ListBox x:Name="newMeasurements" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="AddNewMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddMeasurementButton_Click" />
-                    <Button x:Name="EditNewMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditMeasurementButton_Click"/>
-                    <Button x:Name="DeleteNewMeasurementButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteMeasurementButton_Click"/>
+                    <Button x:Name="AddNewMeasurementButton" Content="Lägg till mätpunkt" FontSize="12" Margin="10" Width="110" Click="AddNewMeasurementButton_Click"  />
+                    <Button x:Name="EditNewMeasurementButton" Content="Redigera mätpunkt" FontSize="12" Margin="10" Width="110" Click="EditNewMeasurementButton_Click" />
+                    <Button x:Name="DeleteNewMeasurementButton" Content="Ta bort mätpunkt" FontSize="12" Margin="10" Width="100" Click="DeleteNewMeasurementButton_Click" />
                 </StackPanel>
                 <Label Content="GPS punkt:" FontSize="12" />
                 <ListBox x:Name="Geolocations" Height="50" MaxHeight="75"></ListBox>
