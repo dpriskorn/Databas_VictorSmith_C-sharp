@@ -31,6 +31,7 @@ namespace Databas_VictorSmith_C_sharp
         List<Observer> listOfObservers = null;
         List<Measurement> listOfNewMeasurements = null;
         List<Measurement> listOfMeasurements = null;
+        List<Geolocation> listOfGeolocations = null;
         //System.Diagnostics.Trace.WriteLine($"MainWindow:INITIALIZATION");
         readonly List<Observer> initialListOfObservers = CRUD.GetObserverList();
         #endregion
@@ -282,6 +283,10 @@ namespace Databas_VictorSmith_C_sharp
                 FetchMeasurements(selectedObservation);
                 FetchGeolocations();
                 FetchAreas();
+                //TODO fyll i nuvarande GPS punkt i labeln
+                //MessageBox.Show(selectedObservation.Geolocation_Id.ToString());
+                //MessageBox.Show(listOfGeolocations.Find(g => g.Id == selectedObservation.Geolocation_Id).ToString());
+                //currentGeolocation.Content = 
             }
             else
             {
@@ -312,6 +317,7 @@ namespace Databas_VictorSmith_C_sharp
         private void CancelObservationButton_Click(object sender, RoutedEventArgs e)
         {
             EditObservationBox.Visibility = Visibility.Hidden;
+
         }
 
         private void CancelNewObservationButton_Click(object sender, RoutedEventArgs e)

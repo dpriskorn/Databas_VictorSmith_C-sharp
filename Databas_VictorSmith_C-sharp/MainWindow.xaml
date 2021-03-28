@@ -99,10 +99,10 @@
                 <Label Content="Område:" FontSize="12" />
                 <Label x:Name="currentArea" Content="" FontSize="12" />
                 <ListBox x:Name="editAreas" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera ett annat GPS-punkt ovan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
+                <TextBlock Text = "Markera ett annat område ovan." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Mätpunkter i denna observation:" FontSize="12" />
                 <ListBox x:Name="observationMeasurements" Height="50" MaxHeight="75"></ListBox>
-                <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
+                <TextBlock Text = "Markera för att se detaljer och ändra/ta bort mätpunkten." MaxWidth="250" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Nuvarande GPS punkt:" FontSize="12" />
                 <Label x:Name="currentGeolocation" Content="" FontSize="12" />
                 <ListBox x:Name="editGeolocations" Height="50" MaxHeight="75"></ListBox>

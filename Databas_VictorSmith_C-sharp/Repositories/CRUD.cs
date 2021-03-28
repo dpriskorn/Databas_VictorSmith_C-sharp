@@ -280,7 +280,15 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         public static List<Measurement> GetMeasurementList(Observation observation)
         {
             System.Diagnostics.Trace.WriteLine($"CRUD:GetMeasurementList");
-            string stmt = "SELECT id, value, category_id FROM measurement WHERE observation_id = @observationId ORDER BY id";
+            string stmt = "SELECT measurement.id, value, category.name as category_name, " +
+                "unit.abbreviation as unit_abbreviation " +
+                "FROM measurement " +
+                "JOIN category " +
+                "ON category_id = category.id " +
+                "JOIN unit " +
+                "ON unit_id = unit.id " +
+                "WHERE observation_id = @observationId " +
+                "ORDER BY measurement.id";
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 Measurement instance;
@@ -297,7 +305,8 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                             {
                                 Id = (int)reader["id"],
                                 Value = (double)reader["value"],
-                                Category_Id = (int)reader["category_id"],
+                                Category_Name = (string)reader["category_name"],
+                                Unit_Abbreviation = (string)reader["unit_abbreviation"],
                             };
                             measurements.Add(instance);
                         };
@@ -307,6 +316,58 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return measurements;
             }
         }
+        //public static Geolocation GetGeolocation(Geolocation geolocation)
+        //{
+        //    // Guard against ob==null after deleting an observation.
+        //    if (geolocation != null)
+        //    {
+        //        System.Diagnostics.Trace.WriteLine($"CRUD:GetGeolocation");
+        //        string stmt = "SELECT geolocation.id, latitude, longitude, area.name as area_name " +
+        //                       "FROM geolocation " +
+        //                       "JOIN area " +
+        //                       "ON area_id = area.id " +
+        //                       "WHERE geolocation.id = @geolocationId";
+        //        using (var conn = new NpgsqlConnection(connectionString))
+        //        {
+        //            Geolocation obs = new Geolocation();
+        //            conn.Open();
+        //            using (var command = new NpgsqlCommand(stmt, conn))
+        //            {
+        //                try
+        //                {
+        //                    command.Parameters.Add(new NpgsqlParameter("geolocationId", geolocation.Id));
+        //                    using (var reader = command.ExecuteReader())
+        //                    {
+        //                        while (reader.Read())
+        //                        {
+        //                            Geolocation o;
+        //                            o = new Geolocation()
+        //                            {
+        //                                Id = (int)reader["id"],
+        //                                Area_Name = (string)reader["area_name"],
+        //                                Latitude = (double)reader["latitude"],
+        //                                Longitude = (double)reader["longitude"],
+        //                            };
+        //                            obs = o;
+        //                        };
+        //                    }
+        //                }
+        //                catch (NullReferenceException)
+        //                {
+        //                    MessageBox.Show("NullReferenceException.").ToString();
+        //                    //GetObservationList();
+        //                }
+
+        //            }
+        //            conn.Close();
+        //            return obs;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
         public static List<Geolocation> GetGeolocationList()
         {
             System.Diagnostics.Trace.WriteLine($"CRUD:GetGeolocationList");
