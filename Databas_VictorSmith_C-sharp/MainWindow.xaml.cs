@@ -46,14 +46,20 @@ namespace Databas_VictorSmith_C_sharp
         public void FetchObservations(Observer observer)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchObservations");
-            List<Observation> listOfObservations = CRUD.UpdateObservationList(observer);
+            List<Observation> listOfObservations = CRUD.GetObservationList(observer);
             UpdateObservationsListbox(listOfObservations);
         }
         public void FetchMeasurements(Observation observation)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Measurement> listOfMeasurements = CRUD.UpdateMeasurementList(observation);
+            List<Measurement> listOfMeasurements = CRUD.GetMeasurementList(observation);
             UpdateMeasurementsListbox(listOfMeasurements);
+        }
+        public void FetchGeolocations()
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
+            List<Geolocation> listOfGeolocations = CRUD.GetGeolocationList();
+            UpdateGeolocationsListbox(listOfGeolocations);
         }
         #endregion
         #region UIMETHODS
@@ -71,6 +77,14 @@ namespace Databas_VictorSmith_C_sharp
         {
             observationMeasurements.ItemsSource = null;
             observationMeasurements.ItemsSource = list;
+        }
+        public void UpdateGeolocationsListbox(List<Geolocation> list)
+        {
+            // We update both at the same time
+            editGeolocations.ItemsSource = null;
+            editGeolocations.ItemsSource = list;
+            Geolocations.ItemsSource = null;
+            Geolocations.ItemsSource = list;
         }
         #endregion
         public MainWindow()
@@ -188,6 +202,7 @@ namespace Databas_VictorSmith_C_sharp
                 {
                     AddObservationBox.Visibility = Visibility.Visible;
                 }
+                FetchGeolocations();
             }
             else
             {
@@ -248,6 +263,7 @@ namespace Databas_VictorSmith_C_sharp
                     EditObservationBox.Visibility = Visibility.Visible;
                 }
                 FetchMeasurements(selectedObservation);
+                FetchGeolocations();
             }
             else
             {

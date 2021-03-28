@@ -13,7 +13,7 @@ namespace Databas_VictorSmith_C_sharp.Models
         public string Area_Name { get; set; }
         public override string ToString()
         {
-            return string.Format("{0}: {1},{2}", Area_Name, Latitude, Longitude);
+            return string.Format("{0}: {1},{2}", Area_Name, Math.Round(Latitude, 2).ToString(), Math.Round(Longitude, 2).ToString());
         }
     }
 }

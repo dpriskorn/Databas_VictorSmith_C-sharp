@@ -237,13 +237,13 @@ namespace Databas_VictorSmith_C_sharp.Repositories
             }
         }
         
-        public static List<Observation> UpdateObservationList(Observer observer)
+        public static List<Observation> GetObservationList(Observer observer)
         {
             //FIXME guard agains observer==null 
             // Guard against ob==null after deleting an observer.
             if (observer != null)
             {
-                System.Diagnostics.Trace.WriteLine($"CRUD:UpdateObservationList");
+                System.Diagnostics.Trace.WriteLine($"CRUD:GetObservationList");
                 string stmt = "SELECT id, date, geolocation_id FROM observation WHERE observer_id = @observerId ORDER BY id";
                 using (var conn = new NpgsqlConnection(connectionString))
                 {
@@ -277,9 +277,9 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 return null;
             }
         }
-        public static List<Measurement> UpdateMeasurementList(Observation observation)
+        public static List<Measurement> GetMeasurementList(Observation observation)
         {
-            System.Diagnostics.Trace.WriteLine($"CRUD:UpdateMeasurementList");
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetMeasurementList");
             string stmt = "SELECT id, value, category_id FROM measurement WHERE observation_id = @observationId ORDER BY id";
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -311,10 +311,11 @@ namespace Databas_VictorSmith_C_sharp.Repositories
         {
             System.Diagnostics.Trace.WriteLine($"CRUD:UpdateGeolocationList");
             // We don't care about area id because we don't support editing or adding geolocations anyway.
-            string stmt = "SELECT id, latitude, longitude, area.name as area_name FROM geolocation" +
+            string stmt = "SELECT geolocation.id, latitude, longitude, area.name as area_name " +
+                "FROM geolocation " +
                 "JOIN area " +
-                "ON area_id = area.id" +
-                "WHERE observation_id = @observationId ORDER BY id";
+                "ON area_id = area.id " +
+                "ORDER BY id";
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 Geolocation instance;
