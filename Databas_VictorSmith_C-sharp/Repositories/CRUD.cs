@@ -31,20 +31,20 @@ namespace Databas_VictorSmith_C_sharp.Repositories
 
         }
 
-        public static void AddCountry(string countryName)
-        {
-            string stmt = "INSERT INTO country (country) VALUES (@countryName)";
-            using (var conn = new NpgsqlConnection(connectionString))
-            {
-                conn.Open();
-                using (var command = new NpgsqlCommand(stmt, conn))
-                {
-                    command.Parameters.Add(new NpgsqlParameter("countryName", countryName));
-                    command.ExecuteNonQuery();
-                }
-                conn.Close();
-            }
-        }
+        //public static void AddCountry(string countryName)
+        //{
+        //    string stmt = "INSERT INTO country (country) VALUES (@countryName)";
+        //    using (var conn = new NpgsqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        using (var command = new NpgsqlCommand(stmt, conn))
+        //        {
+        //            command.Parameters.Add(new NpgsqlParameter("countryName", countryName));
+        //            command.ExecuteNonQuery();
+        //        }
+        //        conn.Close();
+        //    }
+        //}
 
         //public static void AddArea(string areaName, int country_id)
         //{
@@ -437,6 +437,39 @@ namespace Databas_VictorSmith_C_sharp.Repositories
                 }
                 conn.Close();
                 return areas;
+            }
+        }
+        public static List<Category> GetCategoryList()
+        {
+            System.Diagnostics.Trace.WriteLine($"CRUD:GetCategoryList");
+            // We don't care about categories id because we don't support editing or adding Categorys anyway.
+            string stmt = "SELECT id, name " +
+                "FROM category " +
+                "ORDER BY id";
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                Category instance;
+                List<Category> categories = new List<Category>();
+                conn.Open();
+                using (var command = new NpgsqlCommand(stmt, conn))
+                {
+                    //command.Parameters.Add(new NpgsqlParameter("observationId", observation.Id));
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            instance = new Category()
+                            {
+                                Id = (int)reader["id"],
+                                Category_Name = (string)reader["name"],
+                                //Country_Name = (string)reader["country_name"],
+                            };
+                            categories.Add(instance);
+                        };
+                    }
+                }
+                conn.Close();
+                return categories;
             }
         }
         #endregion
