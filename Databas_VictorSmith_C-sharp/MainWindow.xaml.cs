@@ -47,7 +47,7 @@ namespace Databas_VictorSmith_C_sharp
         public Observer selectedObserver = null;
         public Observation selectedObservation = null;
         public Measurement measurementBeingEdited = null;
-        public bool observationBeingEdited = false;
+        public Observation observationBeingEdited = null;
         public bool observationBeingAdded = false;
         public bool measurementBeingAdded = false;
         public List<Observer> listOfObservers = null;
@@ -198,14 +198,14 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void AddObservationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedObserver != null && observationBeingEdited == false)
+            if (selectedObserver != null && observationBeingEdited == null)
             {
                 AddObservationBox.Visibility = Visibility.Visible;
                 FetchGeolocations();
                 observationBeingAdded = true;
                 //FetchAreas();
             }
-            else if (observationBeingEdited == true)
+            else if (observationBeingEdited != null)
             {
                 MessageBox.Show("Redigering pågår. Avbryt eller spara redigeringen av observationen och försök igen.").ToString();
             }
@@ -259,12 +259,11 @@ namespace Databas_VictorSmith_C_sharp
         {
             if (selectedObservation != null && observationBeingAdded == false)
             {
-                observationBeingEdited = true;
+                observationBeingEdited = selectedObservation;
                 EditObservationBox.Visibility = Visibility.Visible;
                 FetchMeasurements(selectedObservation);
                 FetchGeolocations();
                 //FetchAreas();
-                observationBeingEdited = false;
                 //TODO fyll i nuvarande GPS punkt i labeln
                 if (listOfGeolocations != null)
                 {
@@ -326,10 +325,6 @@ namespace Databas_VictorSmith_C_sharp
             FamilyNameNewObserverInput.Text = "";
             FetchObservers();
         }
-        private void SubmitEditObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
         private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewObservationButton_Click");
@@ -355,6 +350,90 @@ namespace Databas_VictorSmith_C_sharp
                 MessageBox.Show($"Minst ett mätpunkt behövs.");
             }
         }
+        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            /// Logic
+            /// First we check the input fields
+            /// Then we create the new measurement object
+            /// Add it to listOfNewMeasurements
+            /// Then we branch 
+            /// - existing observation
+            /// - new observation
+            /// Update the relevant listboxes
+            /// Hide the UI
+            if (Categories.SelectedItem != null && newValueInput.Text != "")
+            {
+                Category category = (Category)Categories.SelectedItem;
+                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                double value;
+                if (Double.TryParse(newValueInput.Text, out value))
+                {
+                    System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:value:{value}");
+                    Measurement measurement = new Measurement()
+                    {
+                        Category_Id = category.Id,
+                        // We don't know the value because the observation has not been submitted yet
+                        Observation_Id = 0,
+                        Value = value,
+                        Unit_Abbreviation = category.Unit_Abbreviation,
+                        Category_Name = category.Category_Name
+                    };
+                    if (listOfNewMeasurements == null)
+                    {
+                        List<Measurement> listOfNewMeasurements = new List<Measurement>();
+                    }
+                    listOfNewMeasurements.Add(measurement);
+                    if (observationBeingEdited != null)
+                    {
+                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:observationMeasurements");
+                        // add to listOfMeasurements also
+                        listOfMeasurements.Add(measurement);
+                        observationMeasurements.ItemsSource = null;
+                        observationMeasurements.ItemsSource = listOfMeasurements;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:newMeasurements");
+                        // New observation
+                        newMeasurements.ItemsSource = null;
+                        newMeasurements.ItemsSource = listOfNewMeasurements;
+                    }
+                    //MessageBox.Show($"Mätpunkt tillagd.");
+                    AddMeasurementBox.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    MessageBox.Show($"Fel inmatning. Accepterar bara siffror med punkt som kommatecken.");
+                }
+            }
+            else if (Categories.SelectedItem == null)
+            {
+                MessageBox.Show($"Kategori saknas.");
+            }
+            else if (editedValueInput.Text == "")
+            {
+                MessageBox.Show($"Mätvärde saknas.");
+            }
+
+        }
+
+        private void SubmitEditObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            /// Logic
+            /// First we check the fields and the lists
+            /// - add using listOfNewMeasurements
+            /// - update using listOfUpdatedMeasurements
+            /// - delete using listOfDeletedMeasurements
+            /// - clear the lists in the end
+            
+            if (listOfNewMeasurements.Count > 0)
+            {
+                foreach (Measurement measurement in listOfNewMeasurements)
+                {
+                    CRUD.AddMeasurement(measurement, observationId);
+                }
+            }
+        }
         private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click");
@@ -376,7 +455,7 @@ namespace Databas_VictorSmith_C_sharp
                         Unit_Abbreviation = category.Unit_Abbreviation,
                         Category_Name = category.Category_Name
                     };
-                    if (observationBeingEdited == true)
+                    if (observationBeingEdited != null)
                     {
                         if (listOfUpdatedMeasurements == null)
                         {
@@ -423,64 +502,6 @@ namespace Databas_VictorSmith_C_sharp
         {
             //TODO commit to db
         }
-        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            ////
-            if (Categories.SelectedItem != null && newValueInput.Text != "")
-            {
-                Category category = (Category)Categories.SelectedItem;
-                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
-                double value;
-                if (Double.TryParse(newValueInput.Text, out value))
-                {
-                    System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:value:{value}");
-                    Measurement measurement = new Measurement()
-                    {
-                        Category_Id = category.Id,
-                        // We don't know the value because the observation has not been submitted yet
-                        Observation_Id = 0,
-                        Value = value,
-                        Unit_Abbreviation = category.Unit_Abbreviation,
-                        Category_Name = category.Category_Name
-                    };
-                    if (listOfNewMeasurements == null)
-                    {
-                        List<Measurement> listOfNewMeasurements = new List<Measurement>();
-                    }
-                    listOfNewMeasurements.Add(measurement);
-                    if (observationBeingEdited == true)
-                    {
-                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:observationMeasurements");
-                        // add to listOfMeasurements also
-                        listOfMeasurements.Add(measurement);
-                        observationMeasurements.ItemsSource = null;
-                        observationMeasurements.ItemsSource = listOfMeasurements;
-                    }
-                    else
-                    {
-                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:newMeasurements");
-                        // New observation
-                        newMeasurements.ItemsSource = null;
-                        newMeasurements.ItemsSource = listOfNewMeasurements;
-                    }
-                    MessageBox.Show($"Mätpunkt tillagd.");
-                    AddMeasurementBox.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    MessageBox.Show($"Fel inmatning. Accepterar bara siffror med punkt som kommatecken.");
-                }
-            }
-            else if (Categories.SelectedItem == null)
-            {
-                MessageBox.Show($"Kategori saknas.");
-            }
-            else if (editedValueInput.Text == "")
-            {
-                MessageBox.Show($"Mätvärde saknas.");
-            }
-            
-        }
         #endregion
 
         #region DELETE
@@ -490,7 +511,7 @@ namespace Databas_VictorSmith_C_sharp
             {
                 MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
             }
-            else if (observationBeingEdited == true)
+            else if (observationBeingEdited != null)
             {
                 MessageBox.Show("En observation är under redigering. Abryt redigeringen för att kunna radera en observatör.").ToString();
             }
@@ -509,7 +530,7 @@ namespace Databas_VictorSmith_C_sharp
             {
                 MessageBox.Show("Ingen observation vald. Välj observation i listan.").ToString();
             }
-            else if (observationBeingEdited == true)
+            else if (observationBeingEdited != null)
             {
                 MessageBox.Show("En observation är under redigering. Abryt redigeringen för att kunna radera en observation.").ToString();
             }
@@ -524,7 +545,7 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void DeleteMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            if (observationBeingEdited == true && observationMeasurements.SelectedItem != null)
+            if (observationBeingEdited != null && observationMeasurements.SelectedItem != null)
             {
                 System.Diagnostics.Trace.WriteLine($"MainWindow:DeleteMeasurementButton_Click:listOfMeasurements.Count:{listOfMeasurements.Count}");
                 if (listOfMeasurements != null && listOfMeasurements.Count > 0)
@@ -564,7 +585,7 @@ namespace Databas_VictorSmith_C_sharp
         private void CancelEditObservationButton_Click(object sender, RoutedEventArgs e)
         {
             EditObservationBox.Visibility = Visibility.Hidden;
-            observationBeingEdited = false;
+            observationBeingEdited = null;
         }
 
         private void CancelNewObservationButton_Click(object sender, RoutedEventArgs e)
