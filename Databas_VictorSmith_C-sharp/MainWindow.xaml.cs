@@ -33,6 +33,7 @@ namespace Databas_VictorSmith_C_sharp
         public bool measurementBeingEdited = false;
         public bool measurementBeingAdded = false;
         public List<Observer> listOfObservers = null;
+        public List<Observation> listOfObservations = null;
         public List<Measurement> listOfNewMeasurements = new List<Measurement>();
         public List<Measurement> listOfMeasurements = null;
         public List<Geolocation> listOfGeolocations = null;
@@ -54,19 +55,19 @@ namespace Databas_VictorSmith_C_sharp
         public void FetchObservations(Observer observer)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchObservations");
-            List<Observation> listOfObservations = CRUD.GetObservationList(observer);
+            listOfObservations = CRUD.GetObservationList(observer);
             UpdateObservationsListbox(listOfObservations);
         }
         public void FetchMeasurements(Observation observation)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchMeasurements");
-            List<Measurement> listOfMeasurements = CRUD.GetMeasurementList(observation);
+            listOfMeasurements = CRUD.GetMeasurementList(observation);
             UpdateMeasurementsListbox(listOfMeasurements);
         }
         public void FetchGeolocations()
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:FetchGeolocations");
-            List<Geolocation> listOfGeolocations = CRUD.GetGeolocationList();
+            listOfGeolocations = CRUD.GetGeolocationList();
             UpdateGeolocationsListbox(listOfGeolocations);
         }
         
@@ -161,94 +162,6 @@ namespace Databas_VictorSmith_C_sharp
         }
         #endregion
 
-        #region SUBMIT
-        private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Lägger till observatörer med För- och efternamn.
-            string firstName, lastName;
-            firstName = NameNewObserverInput.Text.ToString();
-            lastName = FamilyNameNewObserverInput.Text.ToString();
-            CRUD.AddObserver(firstName, lastName);
-            MessageBox.Show($"Observatör tillagd.");
-            AddObserverBox.Visibility = Visibility.Hidden;
-            // clear fields
-            NameNewObserverInput.Text = "";
-            FamilyNameNewObserverInput.Text = "";
-            FetchObservers();
-        }
-        private void SubmitObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
-        private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewObservationButton_Click");
-            if (Geolocations.SelectedItem != null && listOfNewMeasurements.Count > 0 && selectedObserver != null)
-            {
-                Geolocation geolocation = (Geolocation)Geolocations.SelectedItem;
-                int observationId = CRUD.AddObservation(selectedObserver, geolocation.Id);
-                foreach (Measurement measurement in listOfNewMeasurements) {
-                    CRUD.AddMeasurement(measurement, observationId);
-                }
-                MessageBox.Show($"Observation tillagd.");
-                FetchObservations(selectedObserver);
-                AddObservationBox.Visibility = Visibility.Hidden;
-            }
-            else if (Geolocations.SelectedItem == null)
-            {
-                MessageBox.Show($"GPS-punkt saknas.");
-            }
-            else if (listOfNewMeasurements.Count == 0)
-            {
-                MessageBox.Show($"Minst ett mätpunkt behövs.");
-            }
-        }
-        private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO
-        }
-        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click");
-            if (Categories.SelectedItem != null && NewValueInput.Text != "")
-            {
-                Category category = (Category)Categories.SelectedItem;
-                //System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
-                double value = Convert.ToDouble(NewValueInput.Text);
-                Measurement measurement = new Measurement()
-                {
-                    Category_Id = category.Id,
-                    // We don't know the value because the observation has not been submitted yet
-                    Observation_Id = 0,
-                    Value = value,
-                    Unit_Abbreviation = category.Unit_Abbreviation,
-                    Category_Name = category.Category_Name
-                };
-                if (listOfNewMeasurements == null)
-                {
-                    List<Measurement> listOfNewMeasurements = new List<Measurement>();
-                }
-                listOfNewMeasurements.Add(measurement);
-                MessageBox.Show($"Mätpunkt tillagd.");
-                newMeasurements.ItemsSource = null;
-                newMeasurements.ItemsSource = listOfNewMeasurements;
-                AddMeasurementBox.Visibility = Visibility.Hidden;
-            }
-            else if (Categories.SelectedItem == null)
-            {
-                MessageBox.Show($"Kategori saknas.");
-            }
-            else if (NewValueInput.Text == "")
-            {
-                MessageBox.Show($"Mätvärde saknas.");
-            }
-        }
-        private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO commit to db
-        }
-        #endregion
-
         #region ADD
         private void AddObserverButton_Click(object sender, RoutedEventArgs e)
         {
@@ -331,14 +244,21 @@ namespace Databas_VictorSmith_C_sharp
                 FetchAreas();
                 observationBeingEdited = false;
                 //TODO fyll i nuvarande GPS punkt i labeln
-                //MessageBox.Show(selectedObservation.Geolocation_Id.ToString());
-                //MessageBox.Show(listOfGeolocations.Find(g => g.Id == selectedObservation.Geolocation_Id).ToString());
-                //currentGeolocation.Content = 
+                if (listOfGeolocations != null)
+                {
+                    Geolocation location = (Geolocation)listOfGeolocations.Find(g => g.Id == selectedObservation.Geolocation_Id);
+                    currentGeolocation.Content = location.ToString();
+                }
             }
             else if (observationBeingAdded == true)
             {
                 MessageBox.Show("Registrering av ny observation pågår. Avbryt eller spara den nya observationen och försök igen.").ToString();
             }
+            else if (listOfGeolocations == null)
+            {
+                MessageBox.Show("nullfel.").ToString();
+            }
+
             else
             {
                 MessageBox.Show("Ingen observation vald. Välj observation i listan.").ToString();
@@ -346,7 +266,7 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void EditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            if (observationBeingAdded == false)
+            if (measurementBeingAdded == false)
             {
                 measurementBeingEdited = true;
                 EditMeasurementBox.Visibility = Visibility.Visible;
@@ -357,6 +277,95 @@ namespace Databas_VictorSmith_C_sharp
             {
                 MessageBox.Show("Registrering av ny mätpunkt pågår. Avbryt eller spara den nya mätpunkten och försök igen.").ToString();
             }
+        }
+        #endregion
+
+        #region SUBMIT
+        private void SubmitNewObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Lägger till observatörer med För- och efternamn.
+            string firstName, lastName;
+            firstName = NameNewObserverInput.Text.ToString();
+            lastName = FamilyNameNewObserverInput.Text.ToString();
+            CRUD.AddObserver(firstName, lastName);
+            MessageBox.Show($"Observatör tillagd.");
+            AddObserverBox.Visibility = Visibility.Hidden;
+            // clear fields
+            NameNewObserverInput.Text = "";
+            FamilyNameNewObserverInput.Text = "";
+            FetchObservers();
+        }
+        private void SubmitObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        private void SubmitNewObservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewObservationButton_Click");
+            if (Geolocations.SelectedItem != null && listOfNewMeasurements.Count > 0 && selectedObserver != null)
+            {
+                Geolocation geolocation = (Geolocation)Geolocations.SelectedItem;
+                int observationId = CRUD.AddObservation(selectedObserver, geolocation.Id);
+                foreach (Measurement measurement in listOfNewMeasurements)
+                {
+                    CRUD.AddMeasurement(measurement, observationId);
+                }
+                MessageBox.Show($"Observation tillagd.");
+                FetchObservations(selectedObserver);
+                AddObservationBox.Visibility = Visibility.Hidden;
+            }
+            else if (Geolocations.SelectedItem == null)
+            {
+                MessageBox.Show($"GPS-punkt saknas.");
+            }
+            else if (listOfNewMeasurements.Count == 0)
+            {
+                MessageBox.Show($"Minst ett mätpunkt behövs.");
+            }
+        }
+        private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO
+        }
+        private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click");
+            if (Categories.SelectedItem != null && NewValueInput.Text != "")
+            {
+                Category category = (Category)Categories.SelectedItem;
+                //System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                double value = Convert.ToDouble(NewValueInput.Text);
+                Measurement measurement = new Measurement()
+                {
+                    Category_Id = category.Id,
+                    // We don't know the value because the observation has not been submitted yet
+                    Observation_Id = 0,
+                    Value = value,
+                    Unit_Abbreviation = category.Unit_Abbreviation,
+                    Category_Name = category.Category_Name
+                };
+                if (listOfNewMeasurements == null)
+                {
+                    List<Measurement> listOfNewMeasurements = new List<Measurement>();
+                }
+                listOfNewMeasurements.Add(measurement);
+                MessageBox.Show($"Mätpunkt tillagd.");
+                newMeasurements.ItemsSource = null;
+                newMeasurements.ItemsSource = listOfNewMeasurements;
+                AddMeasurementBox.Visibility = Visibility.Hidden;
+            }
+            else if (Categories.SelectedItem == null)
+            {
+                MessageBox.Show($"Kategori saknas.");
+            }
+            else if (NewValueInput.Text == "")
+            {
+                MessageBox.Show($"Mätvärde saknas.");
+            }
+        }
+        private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO commit to db
         }
         #endregion
 
@@ -429,6 +438,7 @@ namespace Databas_VictorSmith_C_sharp
         private void CancelEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             EditMeasurementBox.Visibility = Visibility.Hidden;
+            measurementBeingEdited = false;
         }
 
         private void CancelNewMeasurementButton_Click(object sender, RoutedEventArgs e)
