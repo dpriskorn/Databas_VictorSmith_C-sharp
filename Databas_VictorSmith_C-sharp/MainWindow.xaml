@@ -147,7 +147,7 @@
                 <ListBox x:Name="editCategories" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra kategori genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>
                 <Label Content="Värde:" FontSize="12" />
-                <TextBox x:Name="editedValueInput" Text="testvärde" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
+                <TextBox x:Name="editedValueInput" Text="" Width="100" Height="20" Margin="5" HorizontalAlignment="Left"/>
                 <!--<Label Content="Enhet:" FontSize="12" />
                 <ListBox x:Name="editUnits" Height="50" MaxHeight="75"></ListBox>
                 <TextBlock Text = "Ändra enhet genom att markera i listan"  MaxWidth="200" TextWrapping="Wrap" Margin="5"/>-->

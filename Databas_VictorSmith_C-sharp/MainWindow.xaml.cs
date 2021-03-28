@@ -202,6 +202,7 @@ namespace Databas_VictorSmith_C_sharp
             {
                 AddObservationBox.Visibility = Visibility.Visible;
                 FetchGeolocations();
+                observationBeingAdded = true;
                 //FetchAreas();
             }
             else if (observationBeingEdited == true)
@@ -232,26 +233,27 @@ namespace Databas_VictorSmith_C_sharp
         #region EDIT
         private void EditObserverButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedObserver != null)
-            {
-                // Add and edit boxes share screen real estate and cannot both be shown
-                if (AddObserverBox.Visibility == Visibility.Visible)
-                {
-                    AddObserverBox.Visibility = Visibility.Hidden;
-                    EditObserverBox.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    EditObserverBox.Visibility = Visibility.Visible;
-                }
+            MessageBox.Show($"Inte implementerad än.");
+            //if (selectedObserver != null)
+            //{
+            //    // Add and edit boxes share screen real estate and cannot both be shown
+            //    if (AddObserverBox.Visibility == Visibility.Visible)
+            //    {
+            //        AddObserverBox.Visibility = Visibility.Hidden;
+            //        EditObserverBox.Visibility = Visibility.Visible;
+            //    }
+            //    else
+            //    {
+            //        EditObserverBox.Visibility = Visibility.Visible;
+            //    }
 
-                NameObserverInput.Text = selectedObserver.FirstName;
-                FamilyNameObserverInput.Text = selectedObserver.LastName;
-            }
-            else
-            {
-                MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
-            }
+            //    NameObserverInput.Text = selectedObserver.FirstName;
+            //    FamilyNameObserverInput.Text = selectedObserver.LastName;
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Ingen observatör vald. Välj observatör i listan.").ToString();
+            //}
         }
         private void EditObservationButton_Click(object sender, RoutedEventArgs e)
         {
@@ -292,10 +294,15 @@ namespace Databas_VictorSmith_C_sharp
                 EditMeasurementBox.Visibility = Visibility.Visible;
                 FetchCategories();
                 FetchUnits();
+                editedValueInput.Text = measurementBeingEdited.Value.ToString();
             }
-            else if (observationMeasurements.SelectedItem == null)
+            else if (measurementBeingAdded == true && newMeasurements.SelectedItem != null)
             {
-                MessageBox.Show("nullfel2");
+                measurementBeingEdited = (Measurement)newMeasurements.SelectedItem;
+                EditMeasurementBox.Visibility = Visibility.Visible;
+                FetchCategories();
+                FetchUnits();
+                editedValueInput.Text = measurementBeingEdited.Value.ToString();
             }
             else
             {
@@ -350,50 +357,65 @@ namespace Databas_VictorSmith_C_sharp
         private void SubmitEditMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click");
-            if (Categories.SelectedItem != null && editedValueInput.Text != "")
+            if (editCategories.SelectedItem != null && editedValueInput.Text != "")
             {
                 // Collect values
-                Category category = (Category)Categories.SelectedItem;
-                //System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
-                double value = Convert.ToDouble(editedValueInput.Text);
-                Measurement measurement = new Measurement()
+                Category category = (Category)editCategories.SelectedItem;
+                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                double value;
+                if (Double.TryParse(editedValueInput.Text, out value))
                 {
-                    Category_Id = category.Id,
-                    // We don't know the value because the observation has not been submitted yet
-                    Observation_Id = 0,
-                    Value = value,
-                    Unit_Abbreviation = category.Unit_Abbreviation,
-                    Category_Name = category.Category_Name
-                };
-
-                if (observationBeingEdited == true)
-                {
-                    if (listOfUpdatedMeasurements == null)
+                    System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click:value:{value}");
+                    Measurement measurement = new Measurement()
                     {
-                        List<Measurement> listOfUpdatedMeasurements = new List<Measurement>();
+                        Category_Id = category.Id,
+                        // We don't know the value because the observation has not been submitted yet
+                        Observation_Id = measurementBeingEdited.Id,
+                        Value = value,
+                        Unit_Abbreviation = category.Unit_Abbreviation,
+                        Category_Name = category.Category_Name
+                    };
+                    if (observationBeingEdited == true)
+                    {
+                        if (listOfUpdatedMeasurements == null)
+                        {
+                            List<Measurement> listOfUpdatedMeasurements = new List<Measurement>();
+                        }
+                        listOfUpdatedMeasurements.Add(measurement);
+                        // remove and readd to listOfMeasurements
+                        listOfMeasurements.Remove(measurementBeingEdited);
+                        listOfMeasurements.Add(measurement);
+                        // update listbox
+                        observationMeasurements.ItemsSource = null;
+                        observationMeasurements.ItemsSource = listOfMeasurements;
                     }
-                    listOfUpdatedMeasurements.Add(measurement);
+                    else  // new observation
+                    {
+                        // remove and readd to listOfNewMeasurements
+                        listOfNewMeasurements.Remove(measurementBeingEdited);
+                        listOfNewMeasurements.Add(measurement);
+                        newMeasurements.ItemsSource = null;
+                        newMeasurements.ItemsSource = listOfNewMeasurements;
+                    }
+                    MessageBox.Show($"Mätpunkt tillagd.");
+                    EditMeasurementBox.Visibility = Visibility.Hidden;
                 }
-                else  // new observation
+                else
                 {
-                    //FIXME remove and readd to listOfNewMeasurements
-
-                    newMeasurements.ItemsSource = null;
-                    newMeasurements.ItemsSource = listOfNewMeasurements;
+                    MessageBox.Show($"Fel inmatning. Accepterar bara siffror med punkt som kommatecken.");
                 }
-                
-                
-                MessageBox.Show($"Mätpunkt tillagd.");
-                
-                AddMeasurementBox.Visibility = Visibility.Hidden;
             }
-            else if (Categories.SelectedItem == null)
+            else if (editCategories.SelectedItem == null)
             {
                 MessageBox.Show($"Kategori saknas.");
             }
             else if (editedValueInput.Text == "")
             {
                 MessageBox.Show($"Mätvärde saknas.");
+            }
+            else
+            {
+                MessageBox.Show($"Okänt fel.");
             }
         }
         private void SubmitEditObserverButton_Click(object sender, RoutedEventArgs e)
@@ -403,13 +425,14 @@ namespace Databas_VictorSmith_C_sharp
         private void SubmitNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
             //TODO add to listOfNewMeasurements
-            if (Categories.SelectedItem != null && editedValueInput.Text != "")
+            if (Categories.SelectedItem != null && newValueInput.Text != "")
             {
                 Category category = (Category)Categories.SelectedItem;
-                //System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
+                System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:category:id:{category.Id.ToString()}:unit_id:{category.Unit_Abbreviation}");
                 double value;
-                if (Double.TryParse(editedValueInput.Text, out value))
+                if (Double.TryParse(newValueInput.Text, out value))
                 {
+                    System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:value:{value}");
                     Measurement measurement = new Measurement()
                     {
                         Category_Id = category.Id,
@@ -426,6 +449,7 @@ namespace Databas_VictorSmith_C_sharp
                     listOfNewMeasurements.Add(measurement);
                     if (observationBeingEdited == true)
                     {
+                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:observationMeasurements");
                         // add to listOfMeasurements also
                         listOfMeasurements.Add(measurement);
                         observationMeasurements.ItemsSource = null;
@@ -433,6 +457,7 @@ namespace Databas_VictorSmith_C_sharp
                     }
                     else
                     {
+                        System.Diagnostics.Trace.WriteLine($"MainWindow:SubmitNewMeasurementButton_Click:update:newMeasurements");
                         // New observation
                         newMeasurements.ItemsSource = null;
                         newMeasurements.ItemsSource = listOfNewMeasurements;
@@ -444,7 +469,6 @@ namespace Databas_VictorSmith_C_sharp
                 {
                     MessageBox.Show($"Fel inmatning. Accepterar bara siffror med punkt som kommatecken.");
                 }
-                
             }
             else if (Categories.SelectedItem == null)
             {
@@ -499,15 +523,35 @@ namespace Databas_VictorSmith_C_sharp
         }
         private void DeleteMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-            if (listOfMeasurements != null && listOfMeasurements.Count > 0 && observationMeasurements.SelectedItem != null)
+            if (observationBeingEdited == true && observationMeasurements.SelectedItem != null)
             {
-                Measurement measurement = (Measurement)observationMeasurements.SelectedItem;
-                listOfDeletedMeasurements.Add(measurement);
-                listOfMeasurements.Remove(measurement);
-                observationMeasurements.ItemsSource = null;
-                observationMeasurements.ItemsSource = listOfMeasurements;
+                System.Diagnostics.Trace.WriteLine($"MainWindow:DeleteMeasurementButton_Click:listOfMeasurements.Count:{listOfMeasurements.Count}");
+                if (listOfMeasurements != null && listOfMeasurements.Count > 0)
+                {
+                    Measurement measurement = (Measurement)observationMeasurements.SelectedItem;
+                    listOfDeletedMeasurements.Add(measurement);
+                    listOfMeasurements.Remove(measurement);
+                    observationMeasurements.ItemsSource = null;
+                    observationMeasurements.ItemsSource = listOfMeasurements;
+                }
+                // Silent fail :)
             }
-            // Silent fail :)
+            else if (newMeasurements.SelectedItem != null)
+            {
+                System.Diagnostics.Trace.WriteLine($"MainWindow:DeleteMeasurementButton_Click:listOfNewMeasurements.Count:{listOfNewMeasurements.Count}");
+                if (listOfNewMeasurements != null && listOfNewMeasurements.Count > 0)
+                {
+                    Measurement measurement = (Measurement)newMeasurements.SelectedItem;
+                    listOfNewMeasurements.Remove(measurement);
+                    newMeasurements.ItemsSource = null;
+                    newMeasurements.ItemsSource = listOfNewMeasurements;
+                }
+                // Silent fail :)
+            }
+            else
+            {
+                MessageBox.Show($"fel.");
+            }
         }
         #endregion
 
@@ -548,13 +592,11 @@ namespace Databas_VictorSmith_C_sharp
             EditObserverBox.Visibility = Visibility.Hidden;
             // we dont't clear the fields, because they get populated every time anyways
         }
-        #endregion
-
         
-
         private void CancelNewMeasurementButton_Click(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show($"Inte implementerad.");
         }
+        #endregion
     }
 }
